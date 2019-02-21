@@ -17,6 +17,7 @@ public enum Code {
     ok(0,"ok"),
     fail(-1,"fail"),
     e001(-1,"参数错误"),
+    e002(-1,"降级"),
     ;
     private int code;
     private String msg;
