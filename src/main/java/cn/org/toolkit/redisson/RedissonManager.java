@@ -35,8 +35,8 @@ public class RedissonManager {
                     .setTimeout(10000)
                     .setRetryAttempts(5)
                     .setRetryInterval(3000)
-                    .setAddress("redis://127.0.0.1:6379")
-                    .setPassword("linlin");
+                    .setAddress("redis://127.0.0.1:6379");
+                    //.setPassword("linlin");
             redissonClient = Redisson.create(config);
         } catch (Exception e) {
             e.printStackTrace();

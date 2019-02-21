@@ -24,7 +24,7 @@ public class RDistributedLock {
      * 根据name对进行上锁操作，redissonLock 阻塞式的，采用的机制发布/订阅
      * @param lockName
      */
-    public static void lock(String lockName,int time){
+    public static void lock(String lockName,long time){
         String key = LOCK_FLAG + lockName;
         log.info("key={}",key);
         RLock lock = redisson.getLock(key);
