@@ -6,7 +6,6 @@ import org.redisson.Redisson;
 import org.redisson.api.RLock;
 
 import java.util.concurrent.TimeUnit;
-
 /**
  * @Package com.example.demo.lock
  * @ClassName RDistributedLock
