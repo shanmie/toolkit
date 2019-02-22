@@ -13,7 +13,6 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class DefaultThreadFactory implements ThreadFactory {
     private static final AtomicInteger poolNumber = new AtomicInteger(1);
-
     private final AtomicInteger threadNumber = new AtomicInteger(1);
     private final ThreadGroup threadGroup;
     private final String namePrefix;
@@ -35,5 +34,4 @@ public class DefaultThreadFactory implements ThreadFactory {
         }
         return thread;
     }
-
 }

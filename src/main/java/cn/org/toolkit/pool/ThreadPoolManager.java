@@ -13,7 +13,6 @@ import java.util.concurrent.*;
  */
 public class ThreadPoolManager {
     private ThreadPoolExecutor threadPoolExecutor;
-
     private ScheduledThreadPoolExecutor scheduledThreadPoolExecutor;
 
     private ThreadPoolManager() {
