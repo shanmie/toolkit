@@ -20,16 +20,9 @@ import java.util.concurrent.TimeUnit;
  */
 @Slf4j
 public class LocalCached {
-
-
-    /**
-     * 缓存刷新周期时间格式
-     */
     private static TimeUnit SECONDS = TimeUnit.SECONDS;
     private static TimeUnit MINUTES = TimeUnit.MINUTES;
-
     private static LoadingCache<Object, Object> cache;
-
     private static ListeningExecutorService backgroundRefreshPools = MoreExecutors.listeningDecorator(Executors.newFixedThreadPool(20));
 
     /**
