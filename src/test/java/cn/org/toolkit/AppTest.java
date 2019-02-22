@@ -2,7 +2,6 @@ package cn.org.toolkit;
 
 
 import cn.org.toolkit.guava.GuavaCacheManager;
-import cn.org.toolkit.guava.LocalCached;
 import cn.org.toolkit.redisson.RedissonManager;
 import cn.org.toolkit.result.m1.ResultTemplate;
 import cn.org.toolkit.token.JwtToken;
