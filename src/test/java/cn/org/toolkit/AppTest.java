@@ -1,13 +1,12 @@
 package cn.org.toolkit;
 
 
-import cn.org.toolkit.lock.RDistributedLock;
+import cn.org.toolkit.guava.LocalCached;
 import cn.org.toolkit.redisson.RedissonManager;
 import cn.org.toolkit.result.m1.ResultTemplate;
 import cn.org.toolkit.token.JwtToken;
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.cache.Cache;
-import com.google.gson.JsonObject;
 import org.junit.Test;
 import org.mindrot.jbcrypt.BCrypt;
 import org.redisson.Redisson;
@@ -58,12 +57,23 @@ public class AppTest
         System.out.println(JSONObject.toJSONString(ResultTemplate.ok(new HashMap() {{put("data","data");}})));
     }
     @Test
-    public void testLock(){
-        RDistributedLock.lock("",1l);
-    }
-    @Test
     public void testGuavaCache() throws InterruptedException {
-
+        Cache<Object, Object> cache = LocalCached.getCacheExpire(2,3);
+        cache.stats();
+        cache.put("aa","ds");
+        cache.put("bb","ds");
+        cache.put("cc","ds");
+        System.out.println(cache.getIfPresent("aa"));
+        System.out.println(cache.getIfPresent("bb"));
+        System.out.println(cache.getIfPresent("cc"));
+        while (true){
+            Thread.sleep(5000);
+            System.out.println(cache.getIfPresent("aa"));
+            System.out.println(cache.getIfPresent("bb"));
+            System.out.println(cache.getIfPresent("cc"));
+            System.out.println(LocalCached.getValue("123"));
+            System.out.println(LocalCached.getValue(456));
+        }
 
     }
 }
