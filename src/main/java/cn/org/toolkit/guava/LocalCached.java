@@ -124,7 +124,7 @@ public class LocalCached {
         try {
             return getLoadingCache().get(key);
         } catch (ExecutionException e) {
-            log.error("get value is error", e);
+            log.error("loadingCached get value is error", e);
         }
         return null;
     }
