@@ -19,7 +19,7 @@ import java.util.concurrent.TimeUnit;
  * @Version 1.0.0
  */
 @Slf4j
-public class LocalCached {
+public class GuavaCacheManager {
     private static TimeUnit SECONDS = TimeUnit.SECONDS;
     private static TimeUnit MINUTES = TimeUnit.MINUTES;
     private static LoadingCache<Object, Object> cache;

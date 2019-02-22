@@ -1,6 +1,7 @@
 package cn.org.toolkit;
 
 
+import cn.org.toolkit.guava.GuavaCacheManager;
 import cn.org.toolkit.guava.LocalCached;
 import cn.org.toolkit.redisson.RedissonManager;
 import cn.org.toolkit.result.m1.ResultTemplate;
@@ -58,7 +59,7 @@ public class AppTest
     }
     @Test
     public void testGuavaCache() throws InterruptedException {
-        Cache<Object, Object> cache = LocalCached.getCacheExpire(2,3);
+        Cache<Object, Object> cache = GuavaCacheManager.getCacheExpire(2,3);
         cache.stats();
         cache.put("aa","ds");
         cache.put("bb","ds");
@@ -71,8 +72,8 @@ public class AppTest
             System.out.println(cache.getIfPresent("aa"));
             System.out.println(cache.getIfPresent("bb"));
             System.out.println(cache.getIfPresent("cc"));
-            System.out.println(LocalCached.getValue("123"));
-            System.out.println(LocalCached.getValue(456));
+            System.out.println(GuavaCacheManager.getValue("123"));
+            System.out.println(GuavaCacheManager.getValue(456));
         }
 
     }
