@@ -46,7 +46,7 @@ public class AppTest
     }
     @Test
     public void testRedis(){
-        Redisson red = RedissonManager.getRedisson();
+        Redisson red = RedissonManager.getInstance();
         RAtomicLong aLong = red.getAtomicLong("hello");
         aLong.set(2);
         System.out.println(aLong);

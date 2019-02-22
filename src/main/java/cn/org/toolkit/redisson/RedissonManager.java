@@ -14,8 +14,11 @@ import org.redisson.config.Config;
  */
 public class RedissonManager {
     private static RedissonClient redissonClient;
-    private static Config config = new Config();
+    private Config config = new Config();
     private RedissonManager(){}
+    private static class SingletonHolder{
+        private static final RedissonManager instance = new RedissonManager();
+    }
     /**
      * 初始化Redisson
      * setMasterName
@@ -27,7 +30,7 @@ public class RedissonManager {
      * 将抛出错误。如果尝试在此限制之内发送成功，则开始启用 timeout（命令等待超时） 计时。默认值：3
      * setRetryInterval 在一条命令发送失败以后，等待重试发送的时间间隔。时间单位是毫秒。     默认值：1500
      */
-    public static void init() {
+    public void init() {
         try {
             config.useSingleServer()
                     .setClientName("")
@@ -46,8 +49,9 @@ public class RedissonManager {
      * 获取Redisson的实例对象
      * @return
      */
-    public static Redisson getRedisson(){
-        init();
+    public static Redisson getInstance(){
+        RedissonManager instance = SingletonHolder.instance;
+        instance.init();
         return (Redisson) redissonClient;
     }
 
@@ -57,4 +61,7 @@ public class RedissonManager {
     public static void closed(){
         redissonClient.shutdown();
     }
+
+
+
 }

@@ -17,7 +17,7 @@ import java.util.concurrent.TimeUnit;
  */
 @Slf4j
 public class RDistributedLock {
-    private static Redisson redisson = RedissonManager.getRedisson();
+    private static Redisson redisson = RedissonManager.getInstance();
     private static final String LOCK_FLAG = "redisson_lock_";
     /**
      * 根据name对进行上锁操作，redissonLock 阻塞式的，采用的机制发布/订阅
