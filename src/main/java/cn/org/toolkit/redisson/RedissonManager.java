@@ -30,7 +30,7 @@ public class RedissonManager {
      * 将抛出错误。如果尝试在此限制之内发送成功，则开始启用 timeout（命令等待超时） 计时。默认值：3
      * setRetryInterval 在一条命令发送失败以后，等待重试发送的时间间隔。时间单位是毫秒。     默认值：1500
      */
-    public void init() {
+    private void init() {
         try {
             config.useSingleServer()
                     .setClientName("")
