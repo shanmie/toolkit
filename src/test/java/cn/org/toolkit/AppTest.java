@@ -7,19 +7,22 @@ import cn.org.toolkit.result.m1.ResultTemplate;
 import cn.org.toolkit.token.JwtToken;
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.cache.Cache;
+import lombok.Data;
 import org.junit.Test;
 import org.mindrot.jbcrypt.BCrypt;
 import org.redisson.Redisson;
 import org.redisson.api.RAtomicLong;
 
-import java.util.HashMap;
+import java.util.*;
+
+import static cn.org.toolkit.files.FilesHandler.transform;
+import static cn.org.toolkit.files.FilesHandler.write;
 
 
 /**
  * Unit test for simple App.
  */
-public class AppTest 
-{
+public class AppTest {
     /**
      * Rigorous Test :-)
      */
@@ -76,4 +79,45 @@ public class AppTest
         }
 
     }
+    @Test
+    public void testFilesHandler(){
+        List<A> list = new ArrayList<>();
+        A a = new A();
+        a.setA("你好");
+        a.setB("ss");
+        a.setC(123);
+        list.add(a);
+        A a1 = new A();
+        a1.setA("sd1s");
+        a1.setB("s1s");
+        a1.setC(1213);
+        list.add(a1);
+        A a2 = new A();
+        a2.setA("234");
+        a2.setB("32");
+        a2.setC(12323213);
+        list.add(a2);
+
+
+        List<StringBuilder> builderList = transform(list, "cn.org.toolkit.AppTest");
+        Map<String,Object> map = new HashMap<>();
+        map.put("123","123");
+        map.put("456","456");
+        map.put("654","654");
+        Map<String,Object> map1 = new HashMap<>();
+        map1.put("1213","11123");
+        map1.put("4516","45116");
+        map1.put("6514","6514");
+        List<StringBuilder> builderList1 = transform(Arrays.asList(map,map1));
+        write("/Users/admin/Desktop/11111.txt", builderList, Arrays.asList("1", "2", "3"));
+        write("/Users/admin/Desktop/2222.txt", builderList1, Arrays.asList("1", "2", "3"));
+
+    }
+    @Data
+    class A{
+        String a;
+        String b ;
+        int c;
+    }
+
 }
