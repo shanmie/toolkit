@@ -2,9 +2,12 @@ package cn.org.toolkit.files;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVPrinter;
+import org.apache.commons.csv.CSVRecord;
+import org.apache.commons.lang3.StringUtils;
 
-import java.io.BufferedWriter;
+import java.io.*;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.nio.charset.Charset;
@@ -18,7 +21,7 @@ import java.util.*;
  */
 
 @Slf4j
-public class FilesHandler {
+public class FileSupport {
 
     /**
      * 数据转换
@@ -72,11 +75,16 @@ public class FilesHandler {
                     if (Modifier.isTransient(fields[i].getModifiers())) {
                         continue;
                     }
+                    //访问私有变量
+                    fields[i].setAccessible(true);
                     builder.append(fields[i].get(c));
                     if (i == i1 - 1) {
                         continue;
                     }
                     builder.append(",");
+                }
+                if (i1==0){
+                    return null;
                 }
                 builderList.add(builder);
             }
@@ -88,24 +96,67 @@ public class FilesHandler {
     }
 
     /**
-     * 写文件 支持 txt
+     * 写文件 txt
      * @param filePath
      * @param fileHeader 文件头
      */
-    public static CSVPrinter write(final String filePath, List<StringBuilder> builders, List<String> fileHeader) {
+    public static void writeTxt(final String filePath, List<StringBuilder> builders, List<String> fileHeader) {
         try {
             BufferedWriter bufferedWriter = Files.newBufferedWriter(Paths.get(filePath), Charset.forName("utf-8"));
-            CSVPrinter csvPrinter = new CSVPrinter(bufferedWriter, CSVFormat.DEFAULT.withHeader(fileHeader.toArray(new String[fileHeader.size()])));
+            CSVPrinter csvPrinter = new CSVPrinter(bufferedWriter, CSVFormat.EXCEL.withHeader(fileHeader.toArray(new String[fileHeader.size()])));
             for (StringBuilder str : builders) {
                 csvPrinter.printRecord(str);
             }
-            log.info("====> write file success path is={}", filePath);
+            log.info("====> write txt file success path is={}", filePath);
             csvPrinter.flush();
-            return csvPrinter;
+            csvPrinter.close();
         } catch (Exception e) {
-            log.error("", e);
+            log.error("write file error", e);
         }
-        return null;
     }
+
+    /**
+     * 写文件 csv 中文不同的系统 多半会中文乱码 Linux/mac系统可以配合脚本转换
+     * @param filePath
+     * @param fileHeader 文件头
+     */
+    public static void writeCsv(final String filePath, List<StringBuilder> builders, List<String> fileHeader) {
+        try {
+            FileWriter out = new FileWriter(filePath);
+            CSVPrinter csvPrinter = new CSVPrinter(out, CSVFormat.EXCEL.withHeader(fileHeader.toArray(new String[fileHeader.size()])));
+            for (StringBuilder str : builders) {
+                String[] split = StringUtils.split(str.toString(), ',');
+                csvPrinter.printRecord(Arrays.asList(split));
+            }
+            csvPrinter.flush();
+            csvPrinter.close();
+            log.info("====> write csv file success path is={}", filePath);
+        } catch (Exception e) {
+            log.error("write file error", e);
+        }
+    }
+
+    public static List<CSVRecord> read(final String filePath, List<String> fileHeader, boolean skipHeader) {
+        try {
+            if (StringUtils.isBlank(filePath)){
+                return Collections.emptyList();
+            }
+            Reader reader = Files.newBufferedReader(Paths.get(filePath));
+            if (skipHeader) {
+                CSVFormat csvFormat = CSVFormat.DEFAULT.withHeader(fileHeader.toArray(new String[fileHeader.size()])).withFirstRecordAsHeader().withIgnoreHeaderCase().withTrim();
+                CSVParser csvParser = new CSVParser(reader, csvFormat);
+                return csvParser.getRecords();
+            } else {
+                CSVFormat csvFormat = CSVFormat.DEFAULT.withHeader(fileHeader.toArray(new String[fileHeader.size()])).withIgnoreHeaderCase().withTrim();
+                CSVParser csvParser = new CSVParser(reader, csvFormat);
+                return csvParser.getRecords();
+            }
+        } catch (Exception e) {
+            log.error("read file error",e);
+        }
+        return Collections.emptyList();
+    }
+
+
 
 }

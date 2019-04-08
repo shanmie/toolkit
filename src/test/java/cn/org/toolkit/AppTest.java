@@ -1,22 +1,25 @@
 package cn.org.toolkit;
 
 
+import cn.org.toolkit.files.FileSupport;
 import cn.org.toolkit.guava.GuavaCacheManager;
 import cn.org.toolkit.redisson.RedissonManager;
 import cn.org.toolkit.result.m1.ResultTemplate;
 import cn.org.toolkit.token.JwtToken;
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.cache.Cache;
-import lombok.Data;
+import org.apache.commons.csv.CSVRecord;
 import org.junit.Test;
 import org.mindrot.jbcrypt.BCrypt;
 import org.redisson.Redisson;
 import org.redisson.api.RAtomicLong;
+import org.redisson.api.RBucket;
 
 import java.util.*;
 
-import static cn.org.toolkit.files.FilesHandler.transform;
-import static cn.org.toolkit.files.FilesHandler.write;
+import static cn.org.toolkit.files.FileSupport.transform;
+import static cn.org.toolkit.files.FileSupport.*;
 
 
 /**
@@ -53,6 +56,8 @@ public class AppTest {
         RAtomicLong aLong = red.getAtomicLong("hello");
         aLong.set(2);
         System.out.println(aLong);
+        RBucket<Object> bucket = red.getBucket("");//将key存入redis
+        //bucket.set();
     }
     @Test
     public void testResultTemplate(){
@@ -99,7 +104,7 @@ public class AppTest {
         list.add(a2);
 
 
-        List<StringBuilder> builderList = transform(list, "cn.org.toolkit.AppTest");
+        List<StringBuilder> builderList = transform(list, "cn.org.toolkit.A");
         Map<String,Object> map = new HashMap<>();
         map.put("123","123");
         map.put("456","456");
@@ -108,16 +113,30 @@ public class AppTest {
         map1.put("1213","11123");
         map1.put("4516","45116");
         map1.put("6514","6514");
-        List<StringBuilder> builderList1 = transform(Arrays.asList(map,map1));
-        write("/Users/admin/Desktop/11111.txt", builderList, Arrays.asList("1", "2", "3"));
-        write("/Users/admin/Desktop/2222.txt", builderList1, Arrays.asList("1", "2", "3"));
+        List<StringBuilder> builderList1 =FileSupport. transform(Arrays.asList(map,map1));
+
+        writeCsv("/Users/admin/Desktop/11111.csv", builderList, Arrays.asList("我是csv表头", "2", "3"));
+        writeTxt("/Users/admin/Desktop/2222.txt", builderList, Arrays.asList("我是txt表头", "2", "3"));
+
+
 
     }
-    @Data
-    class A{
-        String a;
-        String b ;
-        int c;
+    @Test
+    public void test(){
+        String s = " ";
+        System.out.println(s.length());
+        List<CSVRecord> read = FileSupport.read("/Users/admin/Desktop/2222.txt", Arrays.asList("1", "2", "3"), true);
+        System.out.println(read);
+        for (CSVRecord c:read) {
+            String s1 = c.toString();
+            Map<String, String> stringStringMap = c.toMap();
+            String comment = c.getComment();
+            JSONObject parseObject = JSONObject.parseObject(JSON.toJSONString(c));
+            System.out.println(parseObject);
+
+            String values = c.get("values");
+            System.out.println(values);
+        }
     }
 
 }
