@@ -9,12 +9,16 @@ import cn.org.toolkit.token.JwtToken;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.cache.Cache;
+import com.sun.deploy.config.OSType;
 import org.apache.commons.csv.CSVRecord;
 import org.junit.Test;
 import org.mindrot.jbcrypt.BCrypt;
 import org.redisson.Redisson;
 import org.redisson.api.RAtomicLong;
 import org.redisson.api.RBucket;
+import sun.awt.OSInfo;
+import sun.jvm.hotspot.runtime.OSThread;
+import sun.misc.OSEnvironment;
 
 import java.util.*;
 
@@ -85,7 +89,7 @@ public class AppTest {
 
     }
     @Test
-    public void testFilesHandler(){
+    public void testFilesSupport(){
         List<A> list = new ArrayList<>();
         A a = new A();
         a.setA("你好");
@@ -115,14 +119,14 @@ public class AppTest {
         map1.put("6514","6514");
         List<StringBuilder> builderList1 =FileSupport. transform(Arrays.asList(map,map1));
 
-        writeCsv("/Users/admin/Desktop/11111.csv", builderList, Arrays.asList("我是csv表头", "2", "3"));
+        writeCsv("/Users/admin/Desktop/11111.csv", "UTF-8",builderList, Arrays.asList("我是csv表头", "2", "3"));
         writeTxt("/Users/admin/Desktop/2222.txt", builderList, Arrays.asList("我是txt表头", "2", "3"));
 
 
 
     }
     @Test
-    public void test(){
+    public void testFilesSupportRead(){
         String s = " ";
         System.out.println(s.length());
         List<CSVRecord> read = FileSupport.read("/Users/admin/Desktop/2222.txt", Arrays.asList("1", "2", "3"), true);
@@ -138,5 +142,6 @@ public class AppTest {
             System.out.println(values);
         }
     }
+
 
 }

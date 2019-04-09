@@ -13,11 +13,10 @@ import lombok.Getter;
  */
 @Getter
 @AllArgsConstructor
-public enum Code {
+public enum CodeEnum {
     ok(0,"ok"),
     fail(-1,"fail"),
-    e001(-1,"参数错误"),
-    e002(-1,"降级"),
+    e002(-2,"服务熔断")
     ;
     private int code;
     private String msg;

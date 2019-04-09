@@ -102,7 +102,7 @@ public class FileSupport {
      */
     public static void writeTxt(final String filePath, List<StringBuilder> builders, List<String> fileHeader) {
         try {
-            BufferedWriter bufferedWriter = Files.newBufferedWriter(Paths.get(filePath), Charset.forName("utf-8"));
+            FileWriter bufferedWriter = new FileWriter(filePath);
             CSVPrinter csvPrinter = new CSVPrinter(bufferedWriter, CSVFormat.EXCEL.withHeader(fileHeader.toArray(new String[fileHeader.size()])));
             for (StringBuilder str : builders) {
                 csvPrinter.printRecord(str);
@@ -115,14 +115,22 @@ public class FileSupport {
         }
     }
 
-    /**
-     * 写文件 csv 中文不同的系统 多半会中文乱码 Linux/mac系统可以配合脚本转换
-     * @param filePath
-     * @param fileHeader 文件头
-     */
+
     public static void writeCsv(final String filePath, List<StringBuilder> builders, List<String> fileHeader) {
+        writeCsv(filePath,"GBK",builders,fileHeader);
+    }
+
+    /**
+     * 写文件 csv 可针对不同的操作系统不同的编码设置对应excel或csv编码
+     * 如果实在不行 Linux/mac系统可以配合脚本转换 也可调ShellExec类函数
+     * @param charsetName
+     * @param filePath
+     * @param builders
+     * @param fileHeader
+     */
+    public static void writeCsv(final String filePath, final String charsetName, List<StringBuilder> builders, List<String> fileHeader) {
         try {
-            FileWriter out = new FileWriter(filePath);
+            BufferedWriter out = Files.newBufferedWriter(Paths.get(filePath), Charset.forName(charsetName));
             CSVPrinter csvPrinter = new CSVPrinter(out, CSVFormat.EXCEL.withHeader(fileHeader.toArray(new String[fileHeader.size()])));
             for (StringBuilder str : builders) {
                 String[] split = StringUtils.split(str.toString(), ',');
@@ -136,6 +144,13 @@ public class FileSupport {
         }
     }
 
+    /**
+     *
+     * @param filePath
+     * @param fileHeader
+     * @param skipHeader
+     * @return
+     */
     public static List<CSVRecord> read(final String filePath, List<String> fileHeader, boolean skipHeader) {
         try {
             if (StringUtils.isBlank(filePath)){

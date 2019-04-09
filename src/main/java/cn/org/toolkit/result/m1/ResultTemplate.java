@@ -1,6 +1,6 @@
 package cn.org.toolkit.result.m1;
 
-import cn.org.toolkit.enums.Code;
+import cn.org.toolkit.enums.CodeEnum;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -27,7 +27,7 @@ public class ResultTemplate<T,E> {
     private int code;
     private String msg;
 
-    ResultTemplate(Code code) {
+    ResultTemplate(CodeEnum code) {
         this.code = code.getCode();
         this.msg = code.getMsg();
     }
@@ -37,7 +37,7 @@ public class ResultTemplate<T,E> {
      * @return
      */
     public static ResultTemplate ok() {
-        ResultTemplate resultTemplate = new ResultTemplate(Code.ok);
+        ResultTemplate resultTemplate = new ResultTemplate(CodeEnum.ok);
         return resultTemplate;
     }
 
@@ -49,7 +49,7 @@ public class ResultTemplate<T,E> {
      * @return
      */
     public static <T> ResultTemplate ok(T body) {
-        ResultTemplate resultTemplate = new ResultTemplate(Code.ok);
+        ResultTemplate resultTemplate = new ResultTemplate(CodeEnum.ok);
         resultTemplate.setBody(body);
         return resultTemplate;
     }
@@ -61,7 +61,7 @@ public class ResultTemplate<T,E> {
      * @param <T>
      * @return
      */
-    public static <T> ResultTemplate ok(Code code , T body) {
+    public static <T> ResultTemplate ok(CodeEnum code , T body) {
         ResultTemplate resultTemplate = new ResultTemplate(code);
         resultTemplate.setBody(body);
         return resultTemplate;
@@ -89,7 +89,7 @@ public class ResultTemplate<T,E> {
      * @return
      */
     public static ResultTemplate fail() {
-        return new ResultTemplate(Code.fail);
+        return new ResultTemplate(CodeEnum.fail);
     }
 
     /**
@@ -97,7 +97,7 @@ public class ResultTemplate<T,E> {
      * @param code
      * @return
      */
-    public static ResultTemplate fail(Code code) {
+    public static ResultTemplate fail(CodeEnum code) {
         return new ResultTemplate(code);
     }
 
@@ -107,7 +107,7 @@ public class ResultTemplate<T,E> {
      * @param msg
      * @return
      */
-    public static ResultTemplate fail(Code code , String msg) {
+    public static ResultTemplate fail(CodeEnum code , String msg) {
         ResultTemplate resultTemplate = new ResultTemplate(code);
         resultTemplate.setMsg(msg);
         return resultTemplate;
@@ -150,7 +150,7 @@ public class ResultTemplate<T,E> {
      * @return
      */
     public static ResultTemplate hystrix(){
-        return new ResultTemplate(Code.e002);
+        return new ResultTemplate(CodeEnum.e002);
     }
 
     /**
@@ -159,7 +159,7 @@ public class ResultTemplate<T,E> {
      * @param msg
      * @return
      */
-    public static ResultTemplate hystrix(Code code , String msg){
+    public static ResultTemplate hystrix(CodeEnum code , String msg){
         ResultTemplate resultTemplate = new ResultTemplate(code);
         resultTemplate.setMsg(msg);
         return resultTemplate;
