@@ -13,7 +13,7 @@ import lombok.Getter;
  */
 @Getter
 @AllArgsConstructor
-public enum CodeEnum {
+public enum Code {
     ok(0,"ok"),
     fail(-1,"fail"),
     e002(-2,"服务熔断")

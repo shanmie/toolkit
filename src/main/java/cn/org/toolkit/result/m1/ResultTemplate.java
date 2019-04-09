@@ -1,6 +1,6 @@
 package cn.org.toolkit.result.m1;
 
-import cn.org.toolkit.enums.CodeEnum;
+import cn.org.toolkit.enums.Code;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -27,7 +27,7 @@ public class ResultTemplate<T,E> {
     private int code;
     private String msg;
 
-    ResultTemplate(CodeEnum code) {
+    ResultTemplate(Code code) {
         this.code = code.getCode();
         this.msg = code.getMsg();
     }
@@ -37,7 +37,7 @@ public class ResultTemplate<T,E> {
      * @return
      */
     public static ResultTemplate ok() {
-        ResultTemplate resultTemplate = new ResultTemplate(CodeEnum.ok);
+        ResultTemplate resultTemplate = new ResultTemplate(Code.ok);
         return resultTemplate;
     }
 
@@ -49,23 +49,11 @@ public class ResultTemplate<T,E> {
      * @return
      */
     public static <T> ResultTemplate ok(T body) {
-        ResultTemplate resultTemplate = new ResultTemplate(CodeEnum.ok);
+        ResultTemplate resultTemplate = new ResultTemplate(Code.ok);
         resultTemplate.setBody(body);
         return resultTemplate;
     }
 
-    /**
-     * success 固定head 自定义 code码
-     * @param code
-     * @param body
-     * @param <T>
-     * @return
-     */
-    public static <T> ResultTemplate ok(CodeEnum code , T body) {
-        ResultTemplate resultTemplate = new ResultTemplate(code);
-        resultTemplate.setBody(body);
-        return resultTemplate;
-    }
 
     /**
      * success 自定义head
@@ -77,7 +65,7 @@ public class ResultTemplate<T,E> {
      * @return
      */
     public static <T, E> ResultTemplate ok(T head, E body) {
-        ResultTemplate resultTemplate = new ResultTemplate();
+        ResultTemplate resultTemplate = new ResultTemplate(Code.ok);
         resultTemplate.setHead(head);
         resultTemplate.setBody(body);
         return resultTemplate;
@@ -89,29 +77,9 @@ public class ResultTemplate<T,E> {
      * @return
      */
     public static ResultTemplate fail() {
-        return new ResultTemplate(CodeEnum.fail);
+        return new ResultTemplate(Code.fail);
     }
 
-    /**
-     * fail 固定head 自定义 code码
-     * @param code
-     * @return
-     */
-    public static ResultTemplate fail(CodeEnum code) {
-        return new ResultTemplate(code);
-    }
-
-    /**
-     * fail 固定head 自定义 code码
-     * @param code
-     * @param msg
-     * @return
-     */
-    public static ResultTemplate fail(CodeEnum code , String msg) {
-        ResultTemplate resultTemplate = new ResultTemplate(code);
-        resultTemplate.setMsg(msg);
-        return resultTemplate;
-    }
 
     /**
      * fail 固定head 自定义 int码
@@ -150,20 +118,10 @@ public class ResultTemplate<T,E> {
      * @return
      */
     public static ResultTemplate hystrix(){
-        return new ResultTemplate(CodeEnum.e002);
+        return new ResultTemplate(Code.e002);
     }
 
-    /**
-     * hystrix 自定义 code码
-     * @param code
-     * @param msg
-     * @return
-     */
-    public static ResultTemplate hystrix(CodeEnum code , String msg){
-        ResultTemplate resultTemplate = new ResultTemplate(code);
-        resultTemplate.setMsg(msg);
-        return resultTemplate;
-    }
+
 
     /**
      * hystrix 固定head 自定义 int码
@@ -178,16 +136,4 @@ public class ResultTemplate<T,E> {
         return resultTemplate;
     }
 
-
-    /**
-     * hystrix 固定 int码
-     * @param msg
-     * @return
-     */
-    public static ResultTemplate hystrix(String msg){
-        ResultTemplate resultTemplate = new ResultTemplate();
-        resultTemplate.setCode(1003);
-        resultTemplate.setMsg(msg);
-        return resultTemplate;
-    }
 }
