@@ -1,12 +1,13 @@
 package cn.org.toolkit.token;
 
-import cn.org.zax.date.JzDate;
+import cn.org.toolkit.utility.DateUtility;
 import com.alibaba.fastjson.JSONObject;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.time.DateUtils;
 
 import javax.crypto.spec.SecretKeySpec;
 import javax.xml.bind.DatatypeConverter;
@@ -78,7 +79,7 @@ public class JwtToken {
         //生成过期时间
         long nowMillis = System.currentTimeMillis();
         log.info(String.format("当前类{%s}生成jwt时间参数:{%s}",
-                Thread.currentThread().getStackTrace()[1].getClassName(), JzDate.toString(nowMillis)));
+                Thread.currentThread().getStackTrace()[1].getClassName(), DateUtility.toString(nowMillis)));
         //生成签名密钥 base64二进制编码
         byte[] apiKeySecretBytes = DatatypeConverter.parseBase64Binary(base64Security);
         Key signingKey = new SecretKeySpec(apiKeySecretBytes, signatureAlgorithm.getJcaName());
@@ -95,8 +96,8 @@ public class JwtToken {
         //添加Token过期时间
         if (TTLMillis >= 0) {
             long expMillis = nowMillis + TTLMillis;
-            log.info("过期时间是:{{}}",JzDate.toString(expMillis));
-            builder.setExpiration(JzDate.toDate(expMillis)).setNotBefore(JzDate.toDate(nowMillis));
+            log.info("过期时间是:{{}}",DateUtility.toString(expMillis));
+            builder.setExpiration(DateUtility.toDate(expMillis)).setNotBefore(DateUtility.toDate(nowMillis));
         }
         //生成JWT
         return builder.compact();

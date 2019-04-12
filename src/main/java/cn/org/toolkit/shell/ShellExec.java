@@ -1,5 +1,6 @@
 package cn.org.toolkit.shell;
 
+import cn.org.toolkit.enums.ScriptType;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.exec.CommandLine;
 import org.apache.commons.exec.DefaultExecutor;
@@ -16,8 +17,18 @@ public class ShellExec {
 
     public static void main(String[] args) throws InterruptedException {
         exec("ping www.baidu.com");
-        Thread.currentThread().sleep(3);
+        Thread.currentThread().sleep(3000);
         Thread.currentThread().interrupted();
+        stop();
+    }
+
+    public static void exec(String bashPath, ScriptType scriptType) {
+        try {
+
+        } catch (Exception e) {
+            log.error(e.getMessage(),e);
+        }
+
     }
 
     public static void exec(String args) {
@@ -33,13 +44,15 @@ public class ShellExec {
             CommandLine cmd = CommandLine.parse(args);
             DefaultExecutor dex = new DefaultExecutor();
             dex.execute(cmd);
+            stop();
         } catch (IOException e) {
             log.error(e.getMessage(),e);
         }
 
     }
 
-    public static void stop(int sysArags){
-        System.exit(sysArags);
+    public static void stop(){
+        long id = Thread.currentThread().getId();
+        exec("kill -9"+id);
     }
 }
