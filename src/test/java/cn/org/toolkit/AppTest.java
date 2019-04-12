@@ -1,7 +1,7 @@
 package cn.org.toolkit;
 
 
-import cn.org.toolkit.files.FileSupport;
+import cn.org.toolkit.files.FileStore;
 import cn.org.toolkit.guava.GuavaCacheManager;
 import cn.org.toolkit.redisson.RedissonManager;
 import cn.org.toolkit.result.m1.ResultTemplate;
@@ -9,21 +9,17 @@ import cn.org.toolkit.token.JwtToken;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.cache.Cache;
-import com.sun.deploy.config.OSType;
 import org.apache.commons.csv.CSVRecord;
 import org.junit.Test;
 import org.mindrot.jbcrypt.BCrypt;
 import org.redisson.Redisson;
 import org.redisson.api.RAtomicLong;
 import org.redisson.api.RBucket;
-import sun.awt.OSInfo;
-import sun.jvm.hotspot.runtime.OSThread;
-import sun.misc.OSEnvironment;
 
 import java.util.*;
 
-import static cn.org.toolkit.files.FileSupport.transform;
-import static cn.org.toolkit.files.FileSupport.*;
+import static cn.org.toolkit.files.FileStore.transform;
+import static cn.org.toolkit.files.FileStore.*;
 
 
 /**
@@ -117,10 +113,11 @@ public class AppTest {
         map1.put("1213","11123");
         map1.put("4516","45116");
         map1.put("6514","6514");
-        List<StringBuilder> builderList1 =FileSupport. transform(Arrays.asList(map,map1));
+        List<StringBuilder> builderList1 = FileStore. transform(Arrays.asList(map,map1));
 
-        writeCsv("/Users/admin/Desktop/11111.csv", "UTF-8",builderList, Arrays.asList("我是csv表头", "2", "3"));
-        writeTxt("/Users/admin/Desktop/2222.txt", builderList, Arrays.asList("我是txt表头", "2", "3"));
+        writeCsv("/Users/admin/Desktop/11111.csv",builderList, Arrays.asList("我是csv表头", "2", "3"));
+        writeCsv("/Users/admin/Desktop/22222.csv", "UTF-8",builderList, Arrays.asList("我是csv表头", "2", "3"));
+        writeTxt("/Users/admin/Desktop/33333.txt", builderList, Arrays.asList("我是txt表头", "2", "3"));
 
 
 
@@ -129,7 +126,7 @@ public class AppTest {
     public void testFilesSupportRead(){
         String s = " ";
         System.out.println(s.length());
-        List<CSVRecord> read = FileSupport.read("/Users/admin/Desktop/2222.txt", Arrays.asList("1", "2", "3"), true);
+        List<CSVRecord> read = FileStore.read("/Users/admin/Desktop/2222.txt", Arrays.asList("1", "2", "3"), true);
         System.out.println(read);
         for (CSVRecord c:read) {
             String s1 = c.toString();

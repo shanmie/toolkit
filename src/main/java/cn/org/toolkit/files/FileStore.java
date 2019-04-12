@@ -21,7 +21,7 @@ import java.util.*;
  */
 
 @Slf4j
-public class FileSupport {
+public class FileStore {
 
     /**
      * 数据转换
@@ -52,7 +52,7 @@ public class FileSupport {
     /**
      * 数据转换 暂时不支持子父类
      * @param ls
-     * @param clazzName 全类名
+     * @param clazzName 内部参数类型 实体类
      * @return
      */
     public static List<StringBuilder> transform(List<?> ls, final String clazzName) {
