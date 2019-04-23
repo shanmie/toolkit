@@ -1,14 +1,18 @@
 package cn.org.toolkit;
 
 
-import cn.org.toolkit.files.FileStore;
+import cn.org.toolkit.files.FileStored;
 import cn.org.toolkit.guava.GuavaCacheManager;
+import cn.org.toolkit.pool.ThreadPoolManager;
 import cn.org.toolkit.redisson.RedissonManager;
 import cn.org.toolkit.result.m1.ResultTemplate;
 import cn.org.toolkit.token.JwtToken;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.cache.Cache;
+import com.sun.tools.javac.util.Assert;
+import com.thoughtworks.xstream.XStream;
+import lombok.Data;
 import org.apache.commons.csv.CSVRecord;
 import org.junit.Test;
 import org.mindrot.jbcrypt.BCrypt;
@@ -18,8 +22,8 @@ import org.redisson.api.RBucket;
 
 import java.util.*;
 
-import static cn.org.toolkit.files.FileStore.transform;
-import static cn.org.toolkit.files.FileStore.*;
+import static cn.org.toolkit.files.FileStored.transform;
+import static cn.org.toolkit.files.FileStored.*;
 
 
 /**
@@ -84,6 +88,13 @@ public class AppTest {
         }
 
     }
+
+    @Data
+    public class A {
+        String a;
+        String b;
+        int c;
+    }
     @Test
     public void testFilesSupport(){
         List<A> list = new ArrayList<>();
@@ -113,7 +124,7 @@ public class AppTest {
         map1.put("1213","11123");
         map1.put("4516","45116");
         map1.put("6514","6514");
-        List<StringBuilder> builderList1 = FileStore. transform(Arrays.asList(map,map1));
+        List<StringBuilder> builderList1 = FileStored. transform(Arrays.asList(map,map1));
 
         writeCsv("/Users/admin/Desktop/11111.csv",builderList, Arrays.asList("我是csv表头", "2", "3"));
         writeCsv("/Users/admin/Desktop/22222.csv", "UTF-8",builderList, Arrays.asList("我是csv表头", "2", "3"));
@@ -126,7 +137,7 @@ public class AppTest {
     public void testFilesSupportRead(){
         String s = " ";
         System.out.println(s.length());
-        List<CSVRecord> read = FileStore.read("/Users/admin/Desktop/2222.txt", Arrays.asList("1", "2", "3"), true);
+        List<CSVRecord> read = FileStored.read("/Users/admin/Desktop/2222.txt", Arrays.asList("1", "2", "3"), true);
         System.out.println(read);
         for (CSVRecord c:read) {
             String s1 = c.toString();
@@ -138,6 +149,37 @@ public class AppTest {
             String values = c.get("values");
             System.out.println(values);
         }
+    }
+    @Data
+    class WxEventMsg{
+        String ToUserName;
+        String FromUserName;
+        String CreateTime;
+        String MsgType;
+        String Event;
+        String EventKey;
+        String Ticket;
+    }
+    @Test
+    public void testXml()  {
+        String s = "<xml>\n" +
+                "  <ToUserName><![CDATA[toUser]]></ToUserName>\n" +
+                "  <FromUserName><![CDATA[FromUser]]></FromUserName>\n" +
+                "  <CreateTime>123456789</CreateTime>\n" +
+                "  <MsgType><![CDATA[event]]></MsgType>\n" +
+                "  <Event><![CDATA[subscribe]]></Event>\n" +
+                "  <EventKey><![CDATA[qrscene_123123]]></EventKey>\n" +
+                "</xml>";
+        XStream xStream = new XStream();
+        xStream.alias("xml",WxEventMsg.class);
+        WxEventMsg  eventMsg = (WxEventMsg) xStream.fromXML(s);
+        System.out.println(eventMsg.getEvent());
+    }
+    @Test
+    public void testAssert(){
+        System.out.println("hello i am aVoid method ,i am assert in here");
+        Assert.check(0==1,"assert pack trip id is null");
+        System.out.println("i am assert done");
     }
 
 
