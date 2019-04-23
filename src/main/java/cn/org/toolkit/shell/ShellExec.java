@@ -13,6 +13,26 @@ import java.io.IOException;
  */
 @Slf4j
 public class ShellExec {
+    CommandLine commandLine;
+
+    public ShellExec(String cmd) {
+        this.commandLine = new CommandLine(cmd);
+    }
+
+    public ShellExec addArg(String arg) {
+        commandLine.addArgument(arg);
+        return this;
+    }
+
+    public void exec() {
+        try {
+            DefaultExecutor dex = new DefaultExecutor();
+            dex.execute(commandLine);
+        } catch (IOException e) {
+            log.error(e.getMessage(), e);
+        }
+    }
+
     public static void exec(String args) {
         try {
             if (OSInfo.OSType.WINDOWS == OSInfo.getOSType()) {
@@ -33,7 +53,7 @@ public class ShellExec {
 
     }
 
-    public static void stop(){
+    public static void stop() {
         System.exit(1);
     }
 }

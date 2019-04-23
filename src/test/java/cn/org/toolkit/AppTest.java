@@ -6,6 +6,7 @@ import cn.org.toolkit.guava.GuavaCacheManager;
 import cn.org.toolkit.pool.ThreadPoolManager;
 import cn.org.toolkit.redisson.RedissonManager;
 import cn.org.toolkit.result.m1.ResultTemplate;
+import cn.org.toolkit.shell.ShellExec;
 import cn.org.toolkit.token.JwtToken;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
@@ -176,10 +177,10 @@ public class AppTest {
         System.out.println(eventMsg.getEvent());
     }
     @Test
-    public void testAssert(){
-        System.out.println("hello i am aVoid method ,i am assert in here");
-        Assert.check(0==1,"assert pack trip id is null");
-        System.out.println("i am assert done");
+    public void testShellExe(){
+        ShellExec s = new ShellExec("ls");
+        s.addArg(" -l").exec();
+        ShellExec.exec("pwd");
     }
 
 
