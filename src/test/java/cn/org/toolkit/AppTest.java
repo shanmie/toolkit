@@ -3,7 +3,6 @@ package cn.org.toolkit;
 
 import cn.org.toolkit.files.FileStored;
 import cn.org.toolkit.guava.GuavaCacheManager;
-import cn.org.toolkit.pool.ThreadPoolManager;
 import cn.org.toolkit.redisson.RedissonManager;
 import cn.org.toolkit.result.m1.ResultTemplate;
 import cn.org.toolkit.shell.ShellExec;
@@ -11,8 +10,6 @@ import cn.org.toolkit.token.JwtToken;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.cache.Cache;
-import com.sun.tools.javac.util.Assert;
-import com.thoughtworks.xstream.XStream;
 import lombok.Data;
 import org.apache.commons.csv.CSVRecord;
 import org.junit.Test;
@@ -68,6 +65,11 @@ public class AppTest {
     public void testResultTemplate(){
         System.out.println(JSONObject.toJSONString(ResultTemplate.ok()));
         System.out.println(JSONObject.toJSONString(ResultTemplate.ok(new HashMap() {{put("data","data");}})));
+        Map<String,Object> map = new HashMap<>();
+        map.put("user",null);
+        map.put("re",null);
+        map.put("s",null);
+        System.out.println(ResultTemplate.ok(map));
     }
     @Test
     public void testGuavaCache() throws InterruptedException {
@@ -151,37 +153,13 @@ public class AppTest {
             System.out.println(values);
         }
     }
-    @Data
-    class WxEventMsg{
-        String ToUserName;
-        String FromUserName;
-        String CreateTime;
-        String MsgType;
-        String Event;
-        String EventKey;
-        String Ticket;
-    }
-    @Test
-    public void testXml()  {
-        String s = "<xml>\n" +
-                "  <ToUserName><![CDATA[toUser]]></ToUserName>\n" +
-                "  <FromUserName><![CDATA[FromUser]]></FromUserName>\n" +
-                "  <CreateTime>123456789</CreateTime>\n" +
-                "  <MsgType><![CDATA[event]]></MsgType>\n" +
-                "  <Event><![CDATA[subscribe]]></Event>\n" +
-                "  <EventKey><![CDATA[qrscene_123123]]></EventKey>\n" +
-                "</xml>";
-        XStream xStream = new XStream();
-        xStream.alias("xml",WxEventMsg.class);
-        WxEventMsg  eventMsg = (WxEventMsg) xStream.fromXML(s);
-        System.out.println(eventMsg.getEvent());
-    }
+
+
+
     @Test
     public void testShellExe(){
         ShellExec s = new ShellExec("ls");
         s.addArg(" -l").exec();
         ShellExec.exec("pwd");
     }
-
-
 }

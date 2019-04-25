@@ -7,23 +7,19 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * @Package: com.example.demo.result.m1
- * @ClassName: ResultTemplate
- * @Description: 统一普通接口返回规范 包含head 和body 可泛型扩展
- * 成功和失败固定
- * 成功时 返回固定head(code码可扩展参照code码表 enum) 和泛型body
- * 失败时 返回固定head(code码可扩展参照code码表 enum) 没有body
- * @Author: Administrator
- * @CreateDate: 2018/4/27 20:10
- * @Version: 1.0.0
+ * @Package: cn.org.toolkit.result.m2
+ * @ClassName: ResultTemplateNoHead
+ * @Description:
+ * @Author: mac-pro
+ * @CreateDate: 2019/2/21 下午12:22
+ * @Version: 1.0
  */
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
 @Builder
-public class ResultTemplate<T,E> {
-    private T head;
-    private E body;
+public class ResultTemplate<T> {
+    private T body;
     private int code;
     private String msg;
 
@@ -54,23 +50,6 @@ public class ResultTemplate<T,E> {
         return resultTemplate;
     }
 
-
-    /**
-     * success 自定义head
-     *
-     * @param head
-     * @param body
-     * @param <T>
-     * @param <E>
-     * @return
-     */
-    public static <T, E> ResultTemplate ok(T head, E body) {
-        ResultTemplate resultTemplate = new ResultTemplate(Code.ok);
-        resultTemplate.setHead(head);
-        resultTemplate.setBody(body);
-        return resultTemplate;
-    }
-
     /**
      * fail 固定head
      *
@@ -94,23 +73,6 @@ public class ResultTemplate<T,E> {
         return resultTemplate;
     }
 
-    /**
-     * fail 自定义head
-     *
-     * @param head
-     * @param body
-     * @param <T>
-     * @param <E>
-     * @return
-     */
-    public static <T, E> ResultTemplate fail(int code, String msg ,T head, E body) {
-        ResultTemplate resultTemplate = new ResultTemplate();
-        resultTemplate.setCode(code);
-        resultTemplate.setMsg(msg);
-        resultTemplate.setHead(head);
-        resultTemplate.setBody(body);
-        return resultTemplate;
-    }
 
     /**
      * hystrix 固定head
@@ -120,7 +82,6 @@ public class ResultTemplate<T,E> {
     public static ResultTemplate hystrix(){
         return new ResultTemplate(Code.e002);
     }
-
 
 
     /**
@@ -135,5 +96,4 @@ public class ResultTemplate<T,E> {
         resultTemplate.setMsg(msg);
         return resultTemplate;
     }
-
 }
