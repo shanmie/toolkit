@@ -7,11 +7,21 @@ import cn.org.toolkit.redisson.RedissonManager;
 import cn.org.toolkit.result.m1.ResultTemplate;
 import cn.org.toolkit.shell.ShellExec;
 import cn.org.toolkit.token.JwtToken;
+import cn.org.toolkit.utility.ListUtility;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.cache.Cache;
-import lombok.Data;
+import com.google.common.collect.ListMultimap;
+import com.google.common.collect.Lists;
+import com.thoughtworks.xstream.io.xml.TraxSource;
+import org.apache.commons.collections.ListUtils;
+import org.apache.commons.collections.MapUtils;
+import org.apache.commons.collections.Transformer;
+import org.apache.commons.collections.TransformerUtils;
 import org.apache.commons.csv.CSVRecord;
+import org.apache.commons.lang3.StringEscapeUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.junit.Test;
 import org.mindrot.jbcrypt.BCrypt;
 import org.redisson.Redisson;
@@ -20,7 +30,6 @@ import org.redisson.api.RBucket;
 
 import java.util.*;
 
-import static cn.org.toolkit.files.FileStored.transform;
 import static cn.org.toolkit.files.FileStored.*;
 
 
@@ -91,49 +100,21 @@ public class AppTest {
         }
 
     }
-
-    @Data
-    public class A {
-        String a;
-        String b;
-        int c;
-    }
     @Test
     public void testFilesSupport(){
-        List<A> list = new ArrayList<>();
-        A a = new A();
-        a.setA("你好");
-        a.setB("ss");
-        a.setC(123);
-        list.add(a);
-        A a1 = new A();
-        a1.setA("sd1s");
-        a1.setB("s1s");
-        a1.setC(1213);
-        list.add(a1);
-        A a2 = new A();
-        a2.setA("234");
-        a2.setB("32");
-        a2.setC(12323213);
-        list.add(a2);
-
-
-        List<StringBuilder> builderList = transform(list, "cn.org.toolkit.A");
         Map<String,Object> map = new HashMap<>();
         map.put("123","123");
-        map.put("456","456");
+        map.put("456","你好");
         map.put("654","654");
         Map<String,Object> map1 = new HashMap<>();
         map1.put("1213","11123");
-        map1.put("4516","45116");
+        map1.put("4516","多少");
         map1.put("6514","6514");
         List<StringBuilder> builderList1 = FileStored. transform(Arrays.asList(map,map1));
 
-        writeCsv("/Users/admin/Desktop/11111.csv",builderList, Arrays.asList("我是csv表头", "2", "3"));
-        writeCsv("/Users/admin/Desktop/22222.csv", "UTF-8",builderList, Arrays.asList("我是csv表头", "2", "3"));
-        writeTxt("/Users/admin/Desktop/33333.txt", builderList, Arrays.asList("我是txt表头", "2", "3"));
-
-
+        writeCsv("/Users/admin/Desktop/11111.csv",builderList1, Arrays.asList("我是csv表头", "2", "3"));
+        writeCsv("/Users/admin/Desktop/22222.csv", "UTF-8",builderList1, Arrays.asList("我是csv表头", "2", "3"));
+        writeTxt("/Users/admin/Desktop/33333.txt", builderList1, Arrays.asList("我是txt表头", "2", "3"));
 
     }
     @Test
@@ -153,13 +134,27 @@ public class AppTest {
             System.out.println(values);
         }
     }
-
-
-
     @Test
     public void testShellExe(){
         ShellExec s = new ShellExec("ls");
         s.addArg(" -l").exec();
         ShellExec.exec("pwd");
     }
+
+    @Test
+    public void test(){
+        String s ="";
+        String[] strings = ListUtility.get(s);
+        List<String> string = ListUtility.getString(s);
+        String stringFirst = ListUtility.getStringFirst(s, "11");
+        System.out.println(strings.toString());
+        System.out.println(string);
+        System.out.println(stringFirst);
+        String b = "123,2323,455,34343";
+        int integerFirst = ListUtility.getIntegerFirst(b, 0);
+        int integerLast = ListUtility.getIntegerLast(b, 0);
+        System.out.println(integerFirst);
+        System.out.println(integerLast);
+    }
+
 }
