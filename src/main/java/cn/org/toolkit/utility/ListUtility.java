@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @author deacon
+ * @author
  * @since 2019/4/28
  */
 public class ListUtility {
@@ -61,7 +61,6 @@ public class ListUtility {
         }
         return strings[0];
     }
-
     public static long getLongFirst(String s,long defaultVal){
         String[] strings = get(s);
         if (strings.length <=0){
@@ -79,7 +78,6 @@ public class ListUtility {
         }
         return defaultVal;
     }
-
     public static int getIntegerFirst(String s,int defaultVal){
         String[] strings = get(s);
         if (strings.length <=0){

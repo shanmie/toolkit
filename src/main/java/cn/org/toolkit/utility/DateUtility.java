@@ -9,8 +9,7 @@ import java.util.Date;
 import static java.time.ZoneId.systemDefault;
 
 /**
- * @author deacon
- * 时间日期工具类
+ * @author
  * @since 2019/4/12
  */
 public class DateUtility {

@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * @author deacon
+ * @author
  * @since 2019/4/12
  */
 public class ArrayUtility {
@@ -25,8 +25,6 @@ public class ArrayUtility {
             val2 = null;
         return val2;
     }
-
-
     /**
      * 将Array 变成 list
      * @param val

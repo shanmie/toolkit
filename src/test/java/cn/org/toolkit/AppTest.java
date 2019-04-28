@@ -11,17 +11,7 @@ import cn.org.toolkit.utility.ListUtility;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.cache.Cache;
-import com.google.common.collect.ListMultimap;
-import com.google.common.collect.Lists;
-import com.thoughtworks.xstream.io.xml.TraxSource;
-import org.apache.commons.collections.ListUtils;
-import org.apache.commons.collections.MapUtils;
-import org.apache.commons.collections.Transformer;
-import org.apache.commons.collections.TransformerUtils;
 import org.apache.commons.csv.CSVRecord;
-import org.apache.commons.lang3.StringEscapeUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.math.NumberUtils;
 import org.junit.Test;
 import org.mindrot.jbcrypt.BCrypt;
 import org.redisson.Redisson;
@@ -140,7 +130,6 @@ public class AppTest {
         s.addArg(" -l").exec();
         ShellExec.exec("pwd");
     }
-
     @Test
     public void test(){
         String s ="";
@@ -150,11 +139,12 @@ public class AppTest {
         System.out.println(strings.toString());
         System.out.println(string);
         System.out.println(stringFirst);
-        String b = "123,2323,455,34343";
+        String b = "123,2323,455,34343 抓紧时间点击添加微信直达分享会";
         int integerFirst = ListUtility.getIntegerFirst(b, 0);
         int integerLast = ListUtility.getIntegerLast(b, 0);
         System.out.println(integerFirst);
         System.out.println(integerLast);
+
     }
 
 }
