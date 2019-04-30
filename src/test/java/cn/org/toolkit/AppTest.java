@@ -7,12 +7,17 @@ import cn.org.toolkit.redisson.RedissonManager;
 import cn.org.toolkit.result.m1.ResultTemplate;
 import cn.org.toolkit.shell.ShellExec;
 import cn.org.toolkit.token.JwtToken;
+import cn.org.toolkit.utility.ArrayUtility;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.cache.Cache;
+import com.google.common.collect.Lists;
 import io.netty.buffer.ByteBufUtil;
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections.ListUtils;
 import org.apache.commons.csv.CSVRecord;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.junit.Test;
 import org.mindrot.jbcrypt.BCrypt;
@@ -28,6 +33,7 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.*;
+import java.util.stream.Collector;
 
 import static cn.org.toolkit.files.FileStored.*;
 
@@ -180,7 +186,17 @@ public class AppTest {
         System.out.println(s);
     }
 
-    public void test2() {
+    @Test
+    public void testArrayUtility() {
+        String s [] ={"aa"};
+        List<String> ss = new ArrayList<>();
+        Collections.addAll(ss,s);
+        System.out.println(ss);
+        Integer a[] ={1,2};
+        List<Integer> integers = ArrayUtility.toList(a);
+        System.out.println(integers);
+        Integer[] integers1 = ArrayUtility.toArray(s, a);
+        System.out.println(ArrayUtils.toString(integers));
     }
 
 
