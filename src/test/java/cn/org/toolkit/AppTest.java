@@ -189,12 +189,11 @@ public class AppTest {
     @Test
     public void testArrayUtility() {
         String s [] ={"aa"};
-        List<String> ss = new ArrayList<>();
-        Collections.addAll(ss,s);
-        System.out.println(ss);
         Integer a[] ={11};
         List<Integer> integers = ArrayUtility.toList(a);
+        List<String> list = ArrayUtility.toList(s);
         System.out.println(integers);
+        System.out.println(list);
 
     }
 
