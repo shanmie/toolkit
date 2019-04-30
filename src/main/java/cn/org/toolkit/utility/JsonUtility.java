@@ -17,7 +17,7 @@ public class JsonUtility {
     /**
      * 当 json数据 key值动态变化时
      * 解析json数据下的Array {"key":"[{ }]"}
-     *
+     * 例如 数据结构 {"123":"[{ }]"}
      * @param set        将需要解析的json 变成set
      * @param jsonObject 需要解析的json
      * @param key        需要解析动态Array中的key值
@@ -80,7 +80,7 @@ public class JsonUtility {
     /**
      * 当 json数据 key值动态变化时
      * 解析json数据下的普通key {"key":"val"}
-     *
+     * 例如数据结构 {"123":"val"}
      * @param set        将需要解析的json 变成set
      * @param jsonObject 需要解析的json
      * @param key        需要动态解析的key
@@ -95,15 +95,16 @@ public class JsonUtility {
     }
 
     /**
-     *
+     *  当 json数据 key值动态变化时
+     *  解析json数据下的普通key {"key":"val"}
+     *  例如数据结构 {"123":"val"}
      * @param data      数据
-     * @param dynKey    需要解析的动态key
-     * @param key       需要解析动态Array中的key值
+     * @param key       需要解析的动态key
      * @return
      */
-    public static Set<?> dynamicParse(String data, String dynKey, String key) {
+    public static Set<?> dynamicParse(String data, String key) {
         JSONObject jb = JSONObject.parseObject(data);
-        JSONObject jsonObject = JSONObject.parseObject(jb.getString(dynKey));
+        JSONObject jsonObject = JSONObject.parseObject(jb.getString(key));
         Set<String> newSet = new HashSet<>();
         dynamicParse(key, jsonObject, newSet, jsonObject.keySet().iterator());
         return newSet;
