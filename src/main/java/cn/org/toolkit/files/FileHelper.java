@@ -21,7 +21,7 @@ import java.util.*;
  */
 
 @Slf4j
-public class FileStored {
+public class FileHelper {
 
     /**
      * 数据转换

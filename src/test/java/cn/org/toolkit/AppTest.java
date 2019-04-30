@@ -1,7 +1,7 @@
 package cn.org.toolkit;
 
 
-import cn.org.toolkit.files.FileStored;
+import cn.org.toolkit.files.FileHelper;
 import cn.org.toolkit.guava.GuavaCacheManager;
 import cn.org.toolkit.redisson.RedissonManager;
 import cn.org.toolkit.result.m1.ResultTemplate;
@@ -37,7 +37,8 @@ import java.net.URL;
 import java.util.*;
 import java.util.stream.Collector;
 
-import static cn.org.toolkit.files.FileStored.*;
+import static cn.org.toolkit.files.FileHelper.writeCsv;
+import static cn.org.toolkit.files.FileHelper.writeTxt;
 
 
 /**
@@ -124,7 +125,7 @@ public class AppTest {
         map1.put("1213", "11123");
         map1.put("4516", "多少");
         map1.put("6514", "6514");
-        List<StringBuilder> builderList1 = FileStored.transform(Arrays.asList(map, map1));
+        List<StringBuilder> builderList1 = FileHelper.transform(Arrays.asList(map, map1));
 
         writeCsv("/Users/admin/Desktop/11111.csv", builderList1, Arrays.asList("我是csv表头", "2", "3"));
         writeCsv("/Users/admin/Desktop/22222.csv", "UTF-8", builderList1, Arrays.asList("我是csv表头", "2", "3"));
@@ -136,7 +137,7 @@ public class AppTest {
     public void testFilesSupportRead() {
         String s = " ";
         System.out.println(s.length());
-        List<CSVRecord> read = FileStored.read("/Users/admin/Desktop/2222.txt", Arrays.asList("1", "2", "3"), true);
+        List<CSVRecord> read = FileHelper.read("/Users/admin/Desktop/2222.txt", Arrays.asList("1", "2", "3"), true);
         System.out.println(read);
         for (CSVRecord c : read) {
             String s1 = c.toString();
@@ -156,6 +157,7 @@ public class AppTest {
         s.addArg(" -l").exec();
         ShellExec.exec("pwd");
     }
+
     @Test
     public void testUtility() {
         String s [] ={"aa"};
