@@ -8,11 +8,13 @@ import cn.org.toolkit.result.m1.ResultTemplate;
 import cn.org.toolkit.shell.ShellExec;
 import cn.org.toolkit.token.JwtToken;
 import cn.org.toolkit.utility.ArrayUtility;
+import cn.org.toolkit.utility.ListUtility;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.cache.Cache;
 import com.google.common.collect.Lists;
 import io.netty.buffer.ByteBufUtil;
+import jodd.util.ArraysUtil;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.ListUtils;
 import org.apache.commons.csv.CSVRecord;
@@ -154,6 +156,23 @@ public class AppTest {
         s.addArg(" -l").exec();
         ShellExec.exec("pwd");
     }
+    @Test
+    public void testUtility() {
+        String s [] ={"aa"};
+        Integer a[] ={11};
+        List<Integer> integers = ArrayUtility.toList(a);
+        List<String> list = ArrayUtility.toList(s);
+        System.out.println(integers);
+        System.out.println(list);
+        String ss = "qw,12,ww,11";
+        System.out.println(ArrayUtils.toString(ListUtility.get(ss)));
+        System.out.println(ListUtility.getIndex(list,1,"1"));
+        System.out.println(ListUtility.getIndex(integers,1,9));
+        System.out.println(ListUtility.getInteger(ss));
+        System.out.println(ListUtility.getLong(ss));
+        System.out.println(ListUtility.getIntegerFirst(ss,0));
+        System.out.println(ListUtility.getIntegerLast(ss,0));
+    }
 
     @Test
     public void test() throws IOException {
@@ -186,16 +205,7 @@ public class AppTest {
         System.out.println(s);
     }
 
-    @Test
-    public void testArrayUtility() {
-        String s [] ={"aa"};
-        Integer a[] ={11};
-        List<Integer> integers = ArrayUtility.toList(a);
-        List<String> list = ArrayUtility.toList(s);
-        System.out.println(integers);
-        System.out.println(list);
 
-    }
 
 
 }
