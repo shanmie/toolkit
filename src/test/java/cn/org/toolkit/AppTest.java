@@ -192,11 +192,10 @@ public class AppTest {
         List<String> ss = new ArrayList<>();
         Collections.addAll(ss,s);
         System.out.println(ss);
-        Integer a[] ={1,2};
+        Integer a[] ={11};
         List<Integer> integers = ArrayUtility.toList(a);
         System.out.println(integers);
-        Integer[] integers1 = ArrayUtility.toArray(s, a);
-        System.out.println(ArrayUtils.toString(integers));
+
     }
 
 
