@@ -207,6 +207,13 @@ public class AppTest {
         System.out.println(s);
     }
 
+    @Test
+    public void test2(){
+        int a  = 10;
+        System.out.println(Integer.toBinaryString(a));
+        int i = a >> 3;
+        System.out.println(i);
+    }
 
 
 
