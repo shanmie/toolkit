@@ -13,20 +13,17 @@ public class ByteUtility {
      */
     public static byte[] toByte(short a) {
         byte[] b = new byte[2];
-
         b[0] = (byte) (a >> 8);
-
         return b;
     }
 
     /**
      * 将short转成byte[2]
-     b[1] = (byte) (a);
+     * b[1] = (byte) (a);
      *
      * @param a
      * @param b
-     * @param offset
-     *            b中的偏移量
+     * @param offset b中的偏移量
      */
     public static void toByte(short a, byte[] b, int offset) {
         b[offset] = (byte) (a >> 8);
@@ -59,8 +56,7 @@ public class ByteUtility {
      *
      * @param a
      * @param b
-     * @param offset
-     *            b的偏移量
+     * @param offset b的偏移量
      */
     public static void toByte(long a, byte[] b, int offset) {
         b[offset + 0] = (byte) (a >> 56);
@@ -78,8 +74,7 @@ public class ByteUtility {
      * byte[8]转long
      *
      * @param b
-     * @param offset
-     *            b的偏移量
+     * @param offset b的偏移量
      * @return
      */
     public static long toLong(byte[] b, int offset) {
@@ -99,14 +94,14 @@ public class ByteUtility {
      * @param b
      * @return
      */
-    public static long toLong(byte[] b , boolean m) {
+    public static long toLong(byte[] b, boolean m) {
         if (m) {
             return ((b[0] & 0xff) << 56) | ((b[1] & 0xff) << 48)
                     | ((b[2] & 0xff) << 40) | ((b[3] & 0xff) << 32) |
 
                     ((b[4] & 0xff) << 24) | ((b[5] & 0xff) << 16)
                     | ((b[6] & 0xff) << 8) | (b[7] & 0xff);
-        }else{
+        } else {
             long a = 0;
             a |= (long) (b[0] & 0xFF);
             a |= (long) (b[1] & 0xFF) << 8;
@@ -129,7 +124,6 @@ public class ByteUtility {
      */
     public static byte[] toByte(long a) {
         byte[] b = new byte[4 * 2];
-
         b[0] = (byte) (a >> 56);
         b[1] = (byte) (a >> 48);
         b[2] = (byte) (a >> 40);
@@ -170,26 +164,24 @@ public class ByteUtility {
      * int转byte数组
      *
      * @param value
-     * @param b 是否用16进制
+     * @param b     是否用16进制
      * @return
      */
-    public static byte[] toBytes(int value,boolean b )
-    {
+    public static byte[] toBytes(int value, boolean b) {
         byte[] src = new byte[4];
-        if (b){
-            src[0] =  (byte) ((value>>24) & 0xFF);
-            src[1] =  (byte) ((value>>16) & 0xFF);
-            src[2] =  (byte) ((value>>8) & 0xFF);
-            src[3] =  (byte) (value & 0xFF);
+        if (b) {
+            src[0] = (byte) ((value >> 24) & 0xFF);
+            src[1] = (byte) ((value >> 16) & 0xFF);
+            src[2] = (byte) ((value >> 8) & 0xFF);
+            src[3] = (byte) (value & 0xFF);
 
-        }else{
+        } else {
             src[0] = (byte) (value >> 24);
             src[1] = (byte) (value >> 16);
             src[2] = (byte) (value >> 8);
             src[3] = (byte) (value);
         }
         return src;
-
     }
 
 
@@ -207,8 +199,10 @@ public class ByteUtility {
         b[offset++] = (byte) (a >> 8);
         b[offset++] = (byte) (a);
     }
+
     /**
      * 十六进制字符串转化为十进制
+     *
      * @param hex
      * @return
      */
@@ -230,20 +224,19 @@ public class ByteUtility {
     }
 
 
-
-
     /**
      * 字符串转二进制数组
+     *
      * @param mac
      * @return
      */
     public static byte[] toByte(String mac) {
-        byte[] datas = new byte[mac.length() / 2];
-        for (int i = 0; i < mac.length(); i+=2) {
+        byte[] data = new byte[mac.length() / 2];
+        for (int i = 0; i < mac.length(); i += 2) {
             String ss = mac.substring(i, i + 2);
-            datas[i/2] = Integer.valueOf(ss, 16).byteValue();
+            data[i / 2] = Integer.valueOf(ss, 16).byteValue();
         }
-        return datas;
+        return data;
     }
 
 }
