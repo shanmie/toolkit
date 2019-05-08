@@ -53,15 +53,15 @@ public class FileHelper {
     /**
      * 数据转换 暂时不支持子父类
      * @param ls
-     * @param clazzName 内部参数类型 实体类
+     * @param clazz 内部参数类型 实体类
      * @return
      */
-    public static List<StringBuilder> transform(List<?> ls, final String clazzName) {
+    public static List<StringBuilder> transform(List<?> ls, final Class<?> clazz) {
         if (null == ls) {
             return null;
         }
         try {
-            Class<?> clazz = Class.forName(clazzName);
+            //Class<?> clazz = Class.forName(clazzName);
             List<StringBuilder> builderList = new ArrayList<>();
             for (Object c : ls) {
                 Field[] fields = clazz.getDeclaredFields();

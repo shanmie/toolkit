@@ -8,6 +8,7 @@ import cn.org.toolkit.result.m1.ResultTemplate;
 import cn.org.toolkit.shell.ShellExec;
 import cn.org.toolkit.token.JwtToken;
 import cn.org.toolkit.utility.ArrayUtility;
+import cn.org.toolkit.utility.DateUtility;
 import cn.org.toolkit.utility.ListUtility;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
@@ -32,9 +33,14 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Array;
+import java.lang.reflect.Field;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.time.LocalDateTime;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.ReentrantLock;
 import java.util.stream.Collector;
 
 import static cn.org.toolkit.files.FileHelper.writeCsv;
@@ -127,9 +133,19 @@ public class AppTest {
         map1.put("6514", "6514");
         List<StringBuilder> builderList1 = FileHelper.transform(Arrays.asList(map, map1));
 
-        writeCsv("/Users/admin/Desktop/11111.csv", builderList1, Arrays.asList("我是csv表头", "2", "3"));
+       /* writeCsv("/Users/admin/Desktop/11111.csv", builderList1, Arrays.asList("我是csv表头", "2", "3"));
         writeCsv("/Users/admin/Desktop/22222.csv", "UTF-8", builderList1, Arrays.asList("我是csv表头", "2", "3"));
-        writeTxt("/Users/admin/Desktop/33333.txt", builderList1, Arrays.asList("我是txt表头", "2", "3"));
+        writeTxt("/Users/admin/Desktop/33333.txt", builderList1, Arrays.asList("我是txt表头", "2", "3"));*/
+
+        A a = new A();
+        a.setA("12");
+        a.setB("22");
+        A a1 = new A();
+        a1.setA("12111");
+        a1.setB("221111");
+
+        List<StringBuilder> transform = FileHelper.transform(Arrays.asList(a, a1), A.class);
+        System.out.println(transform);
 
     }
 
@@ -214,6 +230,19 @@ public class AppTest {
         int i = a >> 3;
         System.out.println(i);
     }
+
+    @Test
+    public void test3(){
+        long l = DateUtility.toMillis(LocalDateTime.of(2019, 5, 7, 12, 00));
+        System.out.println(l);
+        String s = DateUtility.toString(l);
+        System.out.println(s);
+        long l1 = TimeUnit.DAYS.toMillis(60);
+        String ss = DateUtility.toString(l1);
+        System.out.println(ss);
+    }
+
+
 
 
 
