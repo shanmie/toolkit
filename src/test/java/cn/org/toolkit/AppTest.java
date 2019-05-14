@@ -20,6 +20,7 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.ListUtils;
 import org.apache.commons.csv.CSVRecord;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.junit.Test;
@@ -37,7 +38,9 @@ import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.time.LocalDateTime;
+import java.time.*;
+import java.time.chrono.ChronoPeriod;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.ReentrantLock;
@@ -198,7 +201,7 @@ public class AppTest {
         byte[] data = new byte[1024];
         try {
             // 创建URL
-            URL url = new URL("http://test1.sjbly.cn/m19/0429/1447/tjf_120x120_b.jpg");
+            URL url = new URL("http://thirdwx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTL361ia1tEEJGic1aKwn9EufnywamqIXaIsj8v4FGmZ1zGweIYw6UThB5XSicvpXfLN6m4rSNfHA1xBA/132");
             // 创建链接
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("GET");
@@ -233,13 +236,46 @@ public class AppTest {
 
     @Test
     public void test3(){
-        long l = DateUtility.toMillis(LocalDateTime.of(2019, 5, 7, 12, 00));
+        long l = DateUtility.toMillis(LocalDateTime.of(2019, 5, 31, 23, 59));
         System.out.println(l);
         String s = DateUtility.toString(l);
         System.out.println(s);
-        long l1 = TimeUnit.DAYS.toMillis(60);
-        String ss = DateUtility.toString(l1);
-        System.out.println(ss);
+
+
+        long now = 1557713432475l;
+        long l1 = now + 2000;
+        System.out.println("now---"+DateUtility.toString(now));
+        System.out.println("plus---"+DateUtility.toString(l1));
+
+        LocalDateTime  ll= DateUtility.toLocalDateTime(1557713432475l);
+
+
+        LocalDateTime lll = ll.plusDays(2);
+        System.out.println("48 hours"+DateUtility.toString(lll));
+        System.out.println(DateUtility.toString(lll.minusSeconds(120)));
+
+        long time = 24 * 3600 * 2 - 3600;
+        System.out.println(time * 1000);
+
+    }
+
+    @Test
+    public void test4() throws IOException {
+        long now = 1557827336264l;
+        String s = DateUtility.toString(DateUtility.toLocalDateTime(now));
+        System.out.println(s);
+        LocalDateTime localDateTime = DateUtility.toLocalDateTime(now).plusDays(2).minusHours(1);
+        System.out.println(DateUtility.toString(localDateTime));
+
+        long l = DateUtility.toMillis(localDateTime);
+
+        Instant instant = Instant.ofEpochMilli(now);
+        Instant instant1 = Instant.ofEpochMilli(l);
+
+        long seconds = Duration.between(instant, instant1).getSeconds();
+        System.out.println(seconds);
+
+
     }
 
 

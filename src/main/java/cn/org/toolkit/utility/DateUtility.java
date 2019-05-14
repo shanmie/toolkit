@@ -4,6 +4,7 @@ import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
 import static java.time.ZoneId.systemDefault;
@@ -50,6 +51,13 @@ public class DateUtility {
     }
 
     /**
+     * 日期格式化输出 "yyyy-MM-dd HH:mm:ss"
+     * @param l
+     * @return
+     */
+    public static String toString (LocalDateTime l){return l.format(DateTimeFormatter.ofPattern(DEFAULT_FORMATTER));}
+
+    /**
      * 字符串时间 变Date
      * @param date
      * @return
@@ -89,6 +97,10 @@ public class DateUtility {
      */
     public static LocalDate toLocalDate(long epochMilli) {
         return LocalDateTime.ofInstant(Instant.ofEpochMilli(epochMilli), systemDefault()).toLocalDate();
+    }
+
+    public static LocalDateTime toLocalDateTime(long epochMilli) {
+        return LocalDateTime.ofInstant(Instant.ofEpochMilli(epochMilli), systemDefault());
     }
 
     /**
@@ -137,7 +149,7 @@ public class DateUtility {
 
     /**
      * 给某一个日期加上多少天
-     *
+     * ---- 不是特别准 建议用 jdk8的 localDateTime 的plusDay 函数
      * @param date
      * @param day
      * @return
