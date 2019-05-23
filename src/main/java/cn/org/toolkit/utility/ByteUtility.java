@@ -1,10 +1,57 @@
 package cn.org.toolkit.utility;
 
+import com.google.common.primitives.Bytes;
+import io.netty.buffer.ByteBufUtil;
+import org.apache.commons.lang3.CharSet;
+import org.apache.commons.lang3.StringUtils;
+
+import java.nio.charset.Charset;
+import java.util.Arrays;
+
 /**
  * @author deacon
  * @since 2019/4/30
  */
 public class ByteUtility {
+    /**
+     * int转byte数组
+     *
+     * @param value
+     * @param hex     是否用16进制
+     * @return
+     */
+    public static byte[] toBytes(int value, boolean hex) {
+        byte[] src = new byte[4];
+        if (hex) {
+            src[0] = (byte) ((value >> 24) & 0xFF);
+            src[1] = (byte) ((value >> 16) & 0xFF);
+            src[2] = (byte) ((value >> 8) & 0xFF);
+            src[3] = (byte) (value & 0xFF);
+        } else {
+            src[0] = (byte) (value >> 24);
+            src[1] = (byte) (value >> 16);
+            src[2] = (byte) (value >> 8);
+            src[3] = (byte) (value);
+        }
+        return src;
+    }
+
+
+    /**
+     * 字符串转二进制数组
+     *
+     * @param mac
+     * @return
+     */
+    public static byte[] toByte(String mac) {
+        byte[] data = new byte[mac.length() / 2];
+        for (int i = 0; i < mac.length(); i += 2) {
+            String ss = mac.substring(i, i + 2);
+            data[i / 2] = Integer.valueOf(ss, 16).byteValue();
+        }
+        return data;
+    }
+
     /**
      * 将short转成byte[2]
      *
@@ -31,6 +78,46 @@ public class ByteUtility {
     }
 
     /**
+     * long转byte[8]
+     *
+     * @param a
+     * @param b
+     * @param offset b的偏移量
+     */
+    public static void toByte(long a, byte[] b, int offset) {
+        b[offset + 0] = (byte) (a >> 56);
+        b[offset + 1] = (byte) (a >> 48);
+        b[offset + 2] = (byte) (a >> 40);
+        b[offset + 3] = (byte) (a >> 32);
+
+        b[offset + 4] = (byte) (a >> 24);
+        b[offset + 5] = (byte) (a >> 16);
+        b[offset + 6] = (byte) (a >> 8);
+        b[offset + 7] = (byte) (a);
+    }
+
+    /**
+     * long转byte[8]
+     *
+     * @param a
+     * @return
+     */
+    public static byte[] toByte(long a) {
+        byte[] b = new byte[4 * 2];
+        b[0] = (byte) (a >> 56);
+        b[1] = (byte) (a >> 48);
+        b[2] = (byte) (a >> 40);
+        b[3] = (byte) (a >> 32);
+
+        b[4] = (byte) (a >> 24);
+        b[5] = (byte) (a >> 16);
+        b[6] = (byte) (a >> 8);
+        b[7] = (byte) (a >> 0);
+
+        return b;
+    }
+
+    /**
      * 将byte[2]转换成short
      *
      * @param b
@@ -52,22 +139,49 @@ public class ByteUtility {
     }
 
     /**
-     * long转byte[8]
+     * byte数组转int
      *
-     * @param a
      * @param b
-     * @param offset b的偏移量
+     * @return
      */
-    public static void toByte(long a, byte[] b, int offset) {
-        b[offset + 0] = (byte) (a >> 56);
-        b[offset + 1] = (byte) (a >> 48);
-        b[offset + 2] = (byte) (a >> 40);
-        b[offset + 3] = (byte) (a >> 32);
+    public static int toInt(byte[] b) {
+        return ((b[0] & 0xff) << 24) | ((b[1] & 0xff) << 16)
+                | ((b[2] & 0xff) << 8) | (b[3] & 0xff);
+    }
 
-        b[offset + 4] = (byte) (a >> 24);
-        b[offset + 5] = (byte) (a >> 16);
-        b[offset + 6] = (byte) (a >> 8);
-        b[offset + 7] = (byte) (a);
+    /**
+     * byte数组转int
+     *
+     * @param b
+     * @param offset
+     * @return
+     */
+    public static int toInt(byte[] b, int offset) {
+        return ((b[offset++] & 0xff) << 24) | ((b[offset++] & 0xff) << 16)
+                | ((b[offset++] & 0xff) << 8) | (b[offset++] & 0xff);
+    }
+
+    /**
+     * 十六进制字符串转化为十进制
+     *
+     * @param hex
+     * @return
+     */
+    public static int toInt(String hex) {
+        hex = hex.toUpperCase();
+        int max = hex.length();
+        int result = 0;
+        for (int i = max; i > 0; i--) {
+            char c = hex.charAt(i - 1);
+            int algorism = 0;
+            if (c >= '0' && c <= '9') {
+                algorism = c - '0';
+            } else {
+                algorism = c - 55;
+            }
+            result += Math.pow(16, max - i) * algorism;
+        }
+        return result;
     }
 
     /**
@@ -115,128 +229,14 @@ public class ByteUtility {
         }
     }
 
-
-    /**
-     * long转byte[8]
-     *
-     * @param a
-     * @return
-     */
-    public static byte[] toByte(long a) {
-        byte[] b = new byte[4 * 2];
-        b[0] = (byte) (a >> 56);
-        b[1] = (byte) (a >> 48);
-        b[2] = (byte) (a >> 40);
-        b[3] = (byte) (a >> 32);
-
-        b[4] = (byte) (a >> 24);
-        b[5] = (byte) (a >> 16);
-        b[6] = (byte) (a >> 8);
-        b[7] = (byte) (a >> 0);
-
-        return b;
+    public static String toString(byte[] val){
+        return StringUtils.toEncodedString(val,Charset.defaultCharset());
     }
 
-    /**
-     * byte数组转int
-     *
-     * @param b
-     * @return
-     */
-    public static int toInt(byte[] b) {
-        return ((b[0] & 0xff) << 24) | ((b[1] & 0xff) << 16)
-                | ((b[2] & 0xff) << 8) | (b[3] & 0xff);
-    }
-
-    /**
-     * byte数组转int
-     *
-     * @param b
-     * @param offset
-     * @return
-     */
-    public static int toInt(byte[] b, int offset) {
-        return ((b[offset++] & 0xff) << 24) | ((b[offset++] & 0xff) << 16)
-                | ((b[offset++] & 0xff) << 8) | (b[offset++] & 0xff);
-    }
-
-    /**
-     * int转byte数组
-     *
-     * @param value
-     * @param b     是否用16进制
-     * @return
-     */
-    public static byte[] toBytes(int value, boolean b) {
-        byte[] src = new byte[4];
-        if (b) {
-            src[0] = (byte) ((value >> 24) & 0xFF);
-            src[1] = (byte) ((value >> 16) & 0xFF);
-            src[2] = (byte) ((value >> 8) & 0xFF);
-            src[3] = (byte) (value & 0xFF);
-
-        } else {
-            src[0] = (byte) (value >> 24);
-            src[1] = (byte) (value >> 16);
-            src[2] = (byte) (value >> 8);
-            src[3] = (byte) (value);
+    public static String toString(byte[] val,String charSet){
+        if (StringUtils.isBlank(charSet)){
+            toString(val);
         }
-        return src;
+        return StringUtils.toEncodedString(val,Charset.forName(charSet));
     }
-
-
-    /**
-     * int转byte数组
-     *
-     * @param a
-     * @param b
-     * @param offset
-     * @return
-     */
-    public static void toByte(int a, byte[] b, int offset) {
-        b[offset++] = (byte) (a >> 24);
-        b[offset++] = (byte) (a >> 16);
-        b[offset++] = (byte) (a >> 8);
-        b[offset++] = (byte) (a);
-    }
-
-    /**
-     * 十六进制字符串转化为十进制
-     *
-     * @param hex
-     * @return
-     */
-    public static int toBytes(String hex) {
-        hex = hex.toUpperCase();
-        int max = hex.length();
-        int result = 0;
-        for (int i = max; i > 0; i--) {
-            char c = hex.charAt(i - 1);
-            int algorism = 0;
-            if (c >= '0' && c <= '9') {
-                algorism = c - '0';
-            } else {
-                algorism = c - 55;
-            }
-            result += Math.pow(16, max - i) * algorism;
-        }
-        return result;
-    }
-
-
-    /**
-     * 字符串转二进制数组
-     *
-     * @param mac
-     * @return
-     */
-    public static byte[] toByte(String mac) {
-        byte[] data = new byte[mac.length() / 2];
-        for (int i = 0; i < mac.length(); i += 2) {
-            String ss = mac.substring(i, i + 2);
-            data[i / 2] = Integer.valueOf(ss, 16).byteValue();
-        }
-        return data;
-    }
-
 }

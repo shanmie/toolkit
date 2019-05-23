@@ -149,7 +149,7 @@ public class DateUtility {
 
     /**
      * 给某一个日期加上多少天
-     * ---- 不是特别准 建议用 jdk8的 localDateTime 的plusDay 函数
+     * 建议用 jdk8的 localDateTime 的plusDay 函数
      * @param date
      * @param day
      * @return

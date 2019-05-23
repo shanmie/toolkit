@@ -8,12 +8,15 @@ import cn.org.toolkit.result.m1.ResultTemplate;
 import cn.org.toolkit.shell.ShellExec;
 import cn.org.toolkit.token.JwtToken;
 import cn.org.toolkit.utility.ArrayUtility;
+import cn.org.toolkit.utility.ByteUtility;
 import cn.org.toolkit.utility.DateUtility;
 import cn.org.toolkit.utility.ListUtility;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.cache.Cache;
 import com.google.common.collect.Lists;
+import com.google.gson.JsonObject;
+import com.googlecode.javaewah.EWAHCompressedBitmap;
 import io.netty.buffer.ByteBufUtil;
 import jodd.util.ArraysUtil;
 import org.apache.commons.collections.CollectionUtils;
@@ -23,6 +26,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringEscapeUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;
 import org.mindrot.jbcrypt.BCrypt;
 import org.redisson.Redisson;
@@ -30,10 +34,7 @@ import org.redisson.api.RAtomicLong;
 import org.redisson.api.RBucket;
 import sun.misc.BASE64Encoder;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.net.HttpURLConnection;
@@ -233,7 +234,6 @@ public class AppTest {
         int i = a >> 3;
         System.out.println(i);
     }
-
     @Test
     public void test3(){
         long l = DateUtility.toMillis(LocalDateTime.of(2019, 5, 31, 23, 59));
@@ -258,28 +258,67 @@ public class AppTest {
         System.out.println(time * 1000);
 
     }
-
     @Test
     public void test4() throws IOException {
-        long now = 1557827336264l;
-        String s = DateUtility.toString(DateUtility.toLocalDateTime(now));
-        System.out.println(s);
-        LocalDateTime localDateTime = DateUtility.toLocalDateTime(now).plusDays(2).minusHours(1);
-        System.out.println(DateUtility.toString(localDateTime));
+        LocalDateTime clock = LocalDateTime.now().plusMinutes(1);
+        System.out.println(DateUtility.toString(clock)+"--long:"+DateUtility.toMillis(clock));
+        long l = DateUtility.toMillis(LocalDateTime.now()) ;
+        System.out.println(DateUtility.toString(l));
+        long ll =1557898260741l;
+        System.out.println(l/1000);
+        System.out.println(ll/1000);
 
-        long l = DateUtility.toMillis(localDateTime);
+        long llll = 1557774000000l;
+        System.out.println(DateUtility.toString(llll));
+        LocalTime localTime = DateUtility.toLocalDateTime(llll).toLocalTime();
 
-        Instant instant = Instant.ofEpochMilli(now);
-        Instant instant1 = Instant.ofEpochMilli(l);
+        System.out.println(localTime);
+    }
+    @Test
+    public void googleBitMap() {
+        EWAHCompressedBitmap ewahBitmap1 =EWAHCompressedBitmap.bitmapOf(0, 2, 55, 64, 1<<30);
+        EWAHCompressedBitmap ewahBitmap2 =EWAHCompressedBitmap.bitmapOf(1, 3, 64, 1<<30);
+        System.out.println("bitmap 1: "+ ewahBitmap1);
+        System.out.println("bitmap 2: "+ ewahBitmap2);
+        EWAHCompressedBitmap orbitmap = ewahBitmap1.or(ewahBitmap2);
+        System.out.println("bitmap 1 OR bitmap 2: "+ orbitmap);
+        System.out.println("memory usage: "+ orbitmap.sizeInBytes() +" bytes");
 
-        long seconds = Duration.between(instant, instant1).getSeconds();
-        System.out.println(seconds);
+       /* ByteArrayOutputStream bos =new ByteArrayOutputStream();
+        // Note: you could use a file output steam instead of ByteArrayOutputStream ewahBitmap1.serialize(newDataOutputStream(bos));
+        EWAHCompressedBitmap ewahBitmap1new =new EWAHCompressedBitmap();
+        byte[] bout = bos.toByteArray();
+        ewahBitmap1new.deserialize(new DataInputStream(new ByteArrayInputStream(bout)));
+        System.out.println("bitmap 1 (recovered) : "+ ewahBitmap1new);
+        if (!ewahBitmap1.equals(ewahBitmap1new)) throw new RuntimeException("Will not happen");*/
+        //// we can use a ByteBuffer as backend for a bitmap// which allows memory-mapped bitmaps//ByteBuffer bb =ByteBuffer.wrap(bout);
 
+        Map<String,Object> map=new HashMap<>();
+        map.put("text","Hi~ 恭喜您赢得分享会限量体验名额！✌️\n" +
+                "\n" +
+                "⏰抓紧时间\uD83D\uDC49<a href=\"https://f11.sjbly.cn/y19/0422/1916/00yta_o.jpg\">点击添加微信直达分享会</a>\n" +
+                "\n" +
+                "【添加微信您将获得】\n" +
+                "✅3期分享会精品PDF干货资源；\n" +
+                "✅1对1私人自由行私享定制体验；\n" +
+                "\n" +
+                "欢迎将海报转发给好友，一起参加分享会！\uD83C\uDF0D");
+        map.put("text_customer","VjI-g52wYC-j4Y_XXCRsOrZeRuT-39RsKax4PsK8XzI");
+        Object o = JSONObject.toJSON(map);
+        System.out.println(o);
 
     }
 
+    @Test
+    public void test5(){
+        String s ="ada123";
+        byte[] bytes = s.getBytes();
+        System.out.println(ByteUtility.toString(bytes));
+        byte a[] = {123};
 
+        String s1 = ByteUtility.toString(a);
+        System.out.println(s1);
 
-
+    }
 
 }
