@@ -1,12 +1,8 @@
 package cn.org.toolkit.utility;
 
-import com.google.common.primitives.Bytes;
-import io.netty.buffer.ByteBufUtil;
-import org.apache.commons.lang3.CharSet;
 import org.apache.commons.lang3.StringUtils;
 
 import java.nio.charset.Charset;
-import java.util.Arrays;
 
 /**
  * @author deacon
@@ -229,10 +225,21 @@ public class ByteUtility {
         }
     }
 
+    /**
+     * byte[] to string
+     * @param val
+     * @return
+     */
     public static String toString(byte[] val){
         return StringUtils.toEncodedString(val,Charset.defaultCharset());
     }
 
+    /**
+     * byte[] to string
+     * @param val       byte []
+     * @param charSet   charset
+     * @return
+     */
     public static String toString(byte[] val,String charSet){
         if (StringUtils.isBlank(charSet)){
             toString(val);
