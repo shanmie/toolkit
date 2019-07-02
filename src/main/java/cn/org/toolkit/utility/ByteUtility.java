@@ -12,8 +12,8 @@ public class ByteUtility {
     /**
      * int转byte数组
      *
-     * @param value
-     * @param hex     是否用16进制
+     * @param value   int value
+     * @param hex     is true use hex
      * @return
      */
     public static byte[] toBytes(int value, boolean hex) {

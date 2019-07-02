@@ -76,37 +76,32 @@ public class JsonUtility {
         return newSet;
     }
 
-
     /**
-     * 当 json数据 key值动态变化时
+     * 当json数据 key值动态变化时
      * 解析json数据下的普通key {"key":"val"}
      * 例如数据结构 {"123":"val"}
-     * @param set        将需要解析的json 变成set
-     * @param jsonObject 需要解析的json
-     * @param key        需要动态解析的key
+     * @param data 原始json数据
+     * @param dataKey 需要解析的data数据集
+     * @param key data里面需要解析的字段
      * @return
-     * @throws Exception
      */
-    public static Set<?> dynamicParse(Set<String> set, JSONObject jsonObject, String key) {
-        Set<String> newSet = new HashSet<>();
-        Iterator iterator = set.iterator();
-        dynamicParse(key, jsonObject, newSet, iterator);
-        return newSet;
+    public static Set<?> dynamicParse(String data,String dataKey, String key) {
+        JSONObject jb = JSONObject.parseObject(data);
+        return dynamicParse(jb.getString(dataKey),key);
     }
 
     /**
      *  当 json数据 key值动态变化时
      *  解析json数据下的普通key {"key":"val"}
      *  例如数据结构 {"123":"val"}
-     * @param data      数据
-     * @param key       需要解析的动态key
+     * @param data      数据集
+     * @param key       需要解析的key
      * @return
      */
     public static Set<?> dynamicParse(String data, String key) {
         JSONObject jb = JSONObject.parseObject(data);
-        JSONObject jsonObject = JSONObject.parseObject(jb.getString(key));
         Set<String> newSet = new HashSet<>();
-        dynamicParse(key, jsonObject, newSet, jsonObject.keySet().iterator());
+        dynamicParse(key, jb, newSet, jb.keySet().iterator());
         return newSet;
     }
 
