@@ -146,22 +146,6 @@ public class DateUtility {
 
     /****************************** JDK8 *************************************/
 
-
-    /**
-     * 给某一个日期加上多少天
-     * 建议用 jdk8的 localDateTime 的plusDay 函数
-     * @param date
-     * @param day
-     * @return
-     */
-    public static long plusDay(long date, long day) {
-        day = day * 24 * 60 * 60 * 1000;
-        date += day;
-        return date;
-    }
-
-
-
     /**
      * 某一个日期 时分秒 清空
      * @param val
