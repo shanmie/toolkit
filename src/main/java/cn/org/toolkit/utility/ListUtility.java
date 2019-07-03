@@ -1,10 +1,17 @@
 package cn.org.toolkit.utility;
 
+import com.google.common.collect.Lists;
+import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.beanutils.BeanUtilsBean;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 
+import java.beans.BeanInfo;
+import java.beans.Introspector;
+import java.beans.PropertyDescriptor;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author
@@ -94,6 +101,34 @@ public class ListUtility {
             return NumberUtils.toInt(s.trim(), defaultVal);
         }
         return defaultVal;
+    }
+
+    public static <T> List<T> transformListBean(List<Map<String,Object>> list,Class<?> T) throws Exception {
+        List<T> beanList = Lists.newArrayList();
+        for (Map<String, Object> map : list) {
+            T t = transformBean(map, T);
+            beanList.add(t);
+        }
+        return beanList;
+    }
+
+
+    public static <T> T transformBean(Map<String,Object> map, Class<?> T) throws Exception {
+        if(map==null || map.size()==0){
+            return null;
+        }
+        BeanInfo beanInfo = Introspector.getBeanInfo(T);
+        T bean = (T)T.newInstance();
+        PropertyDescriptor[] propertyDescriptors = beanInfo.getPropertyDescriptors();
+        for (int i = 0, n = propertyDescriptors.length; i <n ; i++) {
+            PropertyDescriptor descriptor = propertyDescriptors[i];
+            String propertyName = descriptor.getName();
+            if (map.containsKey(propertyName)) {
+                Object value = map.get(propertyName);
+                BeanUtils.copyProperty(bean, propertyName, value);
+            }
+        }
+        return bean;
     }
 
 }
