@@ -225,25 +225,35 @@ public class ByteUtility {
         }
     }
 
+
     /**
-     * byte[] to string
-     * @param val
+     * byte to hex string
+     * @param b
      * @return
      */
-    public static String toString(byte[] val){
-        return StringUtils.toEncodedString(val,Charset.defaultCharset());
+    public static String toString(byte b){
+        String hexString = Integer.toHexString(b & 0xFF);
+        if (hexString.length() == 1){
+            hexString = '0' + hexString;
+        }
+        return hexString;
     }
 
     /**
-     * byte[] to string
-     * @param val       byte []
-     * @param charSet   charset
+     * byte[] to hex string
+     * @param bytes
      * @return
      */
-    public static String toString(byte[] val,String charSet){
-        if (StringUtils.isBlank(charSet)){
-            toString(val);
+    public static String toString(byte[] bytes) {
+        StringBuilder h = new StringBuilder();
+        for (int i = 0; i < bytes.length; i++) {
+            String temp = Integer.toHexString(bytes[i] & 0xFF);
+            if (temp.length() == 1) {
+                temp = "0" + temp;
+            }
+            h.append(temp);
         }
-        return StringUtils.toEncodedString(val,Charset.forName(charSet));
+        return h.toString();
+
     }
 }
