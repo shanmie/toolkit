@@ -1,5 +1,8 @@
 package cn.org.toolkit.utility;
 
+import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Marker;
+
 import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.LocalDate;
@@ -13,8 +16,9 @@ import static java.time.ZoneId.systemDefault;
  * @author
  * @since 2019/4/12
  */
+@Slf4j
 public class DateUtility {
-    public static final String DEFAULT_FORMATTER = "yyyy-MM-dd HH:mm:ss";
+    private static final String DEFAULT_FORMATTER = "yyyy-MM-dd HH:mm:ss";
 
 
     /**
@@ -163,6 +167,7 @@ public class DateUtility {
             return format.format(src);
         } catch (Exception e) {
             // do nothing
+            log.error(e.getMessage(),e);
         }
         return defaultValue;
     }
@@ -173,6 +178,7 @@ public class DateUtility {
             return format.parse(src);
         } catch (Exception e) {
             // do nothing
+            log.error(e.getMessage(),e);
         }
         return defaultDate;
     }
