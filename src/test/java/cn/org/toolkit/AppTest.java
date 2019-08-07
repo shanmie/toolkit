@@ -7,29 +7,32 @@ import cn.org.toolkit.redisson.RedissonManager;
 import cn.org.toolkit.result.m1.ResultTemplate;
 import cn.org.toolkit.shell.ShellExec;
 import cn.org.toolkit.token.JwtToken;
-import cn.org.toolkit.utility.ArrayUtility;
-import cn.org.toolkit.utility.ByteUtility;
-import cn.org.toolkit.utility.DateUtility;
-import cn.org.toolkit.utility.ListUtility;
+import cn.org.toolkit.utility.*;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.cache.Cache;
 import com.google.common.collect.Lists;
 import com.google.gson.JsonObject;
 import com.googlecode.javaewah.EWAHCompressedBitmap;
+import io.github.lukehutch.fastclasspathscanner.matchprocessor.ClassAnnotationMatchProcessor;
 import io.netty.buffer.ByteBufUtil;
 import jodd.util.ArraysUtil;
+import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.ListUtils;
+import org.apache.commons.collections.MapUtils;
 import org.apache.commons.csv.CSVRecord;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.junit.Test;
 import org.mindrot.jbcrypt.BCrypt;
 import org.redisson.Redisson;
+import org.redisson.RedissonLocalCachedMap;
 import org.redisson.api.RAtomicLong;
 import org.redisson.api.RBucket;
 import sun.misc.BASE64Encoder;
@@ -39,14 +42,21 @@ import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.*;
 import java.time.chrono.ChronoPeriod;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.ReentrantLock;
+import java.util.function.Consumer;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collector;
 
+import static cn.org.toolkit.files.FileHelper.transform;
 import static cn.org.toolkit.files.FileHelper.writeCsv;
 import static cn.org.toolkit.files.FileHelper.writeTxt;
 
@@ -54,6 +64,7 @@ import static cn.org.toolkit.files.FileHelper.writeTxt;
 /**
  * Unit test for simple App.
  */
+@Slf4j
 public class AppTest {
     /**
      * Rigorous Test :-)
@@ -135,12 +146,13 @@ public class AppTest {
         map1.put("1213", "11123");
         map1.put("4516", "多少");
         map1.put("6514", "6514");
-        List<StringBuilder> builderList1 = FileHelper.transform(Arrays.asList(map, map1));
+        List<StringBuilder> builderList1 = transform(Arrays.asList(map, map1));
 
        /* writeCsv("/Users/admin/Desktop/11111.csv", builderList1, Arrays.asList("我是csv表头", "2", "3"));
         writeCsv("/Users/admin/Desktop/22222.csv", "UTF-8", builderList1, Arrays.asList("我是csv表头", "2", "3"));
         writeTxt("/Users/admin/Desktop/33333.txt", builderList1, Arrays.asList("我是txt表头", "2", "3"));*/
-
+        //writeTxt("/Users/admin/Desktop/33333.txt", builderList1, Arrays.asList("我是txt表头", "2", "3"));
+        writeCsv("/Users/admin/Desktop/22222.csv", "UTF-8", builderList1, Arrays.asList("我是csv表头", "2", "3"));
         A a = new A();
         a.setA("12");
         a.setB("22");
@@ -148,7 +160,7 @@ public class AppTest {
         a1.setA("12111");
         a1.setB("221111");
 
-        List<StringBuilder> transform = FileHelper.transform(Arrays.asList(a, a1), A.class);
+        List<StringBuilder> transform = transform(Arrays.asList(a, a1), A.class);
         System.out.println(transform);
 
     }
@@ -260,9 +272,11 @@ public class AppTest {
     }
     @Test
     public void test4() throws IOException {
-        LocalDateTime clock = LocalDateTime.now().plusMinutes(1);
+        LocalDateTime clock = LocalDateTime.now().plusMinutes(10);
         System.out.println(DateUtility.toString(clock)+"--long:"+DateUtility.toMillis(clock));
         long l = DateUtility.toMillis(LocalDateTime.now()) ;
+        System.out.println(l);
+
         System.out.println(DateUtility.toString(l));
         long ll =1557898260741l;
         System.out.println(l/1000);
@@ -273,6 +287,10 @@ public class AppTest {
         LocalTime localTime = DateUtility.toLocalDateTime(llll).toLocalTime();
 
         System.out.println(localTime);
+        long lll = (25983489l+10) * 1000 * 60 ;
+        System.out.println(DateUtility.toString(lll));
+
+        System.out.println(DateUtility.toString(l-1000));
     }
     @Test
     public void googleBitMap() {
@@ -311,13 +329,85 @@ public class AppTest {
 
     @Test
     public void test5(){
-        String s ="ada123";
-        byte[] bytes = s.getBytes();
-        System.out.println(ByteUtility.toString(bytes));
-        byte a[] = {123};
 
-        String s1 = ByteUtility.toString(a);
-        System.out.println(s1);
+        byte a =123;
+        System.out.println(ByteUtility.toString(a));
+
+
+
+    }
+
+    @Test
+    public void test6() throws IOException {
+        long l = DateUtility.toMillis(DateUtility.toDate("2019-06-30 23:59:00"));
+        System.out.println(l);
+
+        System.out.println(DateUtility.toString(1561909008124l));
+    }
+
+    @Test
+    public void test7() {
+        String s="{\n" +
+                "    \"code\": 0,\n" +
+                "    \"msg\": \"success\",\n" +
+                "    \"data\": {\n" +
+                "        \"S06476852600207579\": [\n" +
+                "            {\n" +
+                "                \"order_sub_id\": \"S06476852600207579\",\n" +
+                "                \"cat_id\": \"113001\",\n" +
+                "                \"order_type\": \"package\",\n" +
+                "                \"plan_type\": 0,\n" +
+                "                \"order_status\": \"1\",\n" +
+                "                \"user_id\": \"207579\"\n" +
+                "            },\n" +
+                "            {\n" +
+                "                \"order_sub_id\": \"S06476852600207578\",\n" +
+                "                \"cat_id\": \"113221\",\n" +
+                "                \"order_type\": \"package\",\n" +
+                "                \"plan_type\": 0,\n" +
+                "                \"order_status\": \"1\",\n" +
+                "                \"user_id\": \"12121\"\n" +
+                "            }\n" +
+                "        ],\n" +
+                "        \"S06476852600207573\": [\n" +
+                "            {\n" +
+                "                \"order_sub_id\": \"S06476852600207579\",\n" +
+                "                \"cat_id\": \"113301\",\n" +
+                "                \"order_type\": \"package\",\n" +
+                "                \"plan_type\": 0,\n" +
+                "                \"order_status\": \"1\",\n" +
+                "                \"user_id\": \"203579\"\n" +
+                "            }\n" +
+                "        ]\n" +
+                "    }\n" +
+                "}";
+        List<Map<String, Object>> mapList = JsonUtility.dynamicParseArray(s,"data","cat_id","user_id");
+
+        System.out.println(mapList);
+
+
+
+    }
+
+
+    @Test
+    public void test8() throws Exception {
+        String s = "{\"code\":0,\"msg\":\"\",\"data\":[]}";
+        JSONObject parseObject = JSONObject.parseObject(s);
+        System.out.println(parseObject);
+        Object data = parseObject.get("data");
+        if (data instanceof Map){
+            System.out.println(123);
+
+        }
+
+    }
+
+    @Test
+    public void test9(){
+
+        List<Long> transform = ListUtility.transform(Arrays.asList("12"), Long.class);
+        System.out.println(transform);
 
     }
 
