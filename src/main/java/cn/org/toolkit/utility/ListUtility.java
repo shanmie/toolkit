@@ -103,6 +103,15 @@ public class ListUtility {
         return defaultVal;
     }
 
+    public static <T,E> List<E> transform(List<T> list,Class<E> E){
+        List<E> RE = new ArrayList<>();
+        if (E == null){
+            throw new NullPointerException("transform list is not null");
+        }
+        for (T e : list) { RE.add((E)e); }
+        return RE;
+    }
+
     public static <T> List<T> transformListBean(List<Map<String,Object>> list,Class<?> T) throws Exception {
         List<T> beanList = Lists.newArrayList();
         for (Map<String, Object> map : list) {
