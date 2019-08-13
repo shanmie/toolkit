@@ -89,13 +89,6 @@
             <version>1.7.21</version>
         </dependency>
 
-        <!-- https://mvnrepository.com/artifact/it.sauronsoftware/ftp4j -->
-        <dependency>
-            <groupId>it.sauronsoftware</groupId>
-            <artifactId>ftp4j</artifactId>
-            <version>1.7.2</version>
-        </dependency>
-
         <!-- https://mvnrepository.com/artifact/com.jcraft/jsch -->
         <dependency>
             <groupId>com.jcraft</groupId>
